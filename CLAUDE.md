@@ -81,13 +81,15 @@ near-pick-web/
 │   │       ├── reservations/page.tsx
 │   │       └── purchases/page.tsx
 │   ├── (merchant)/                   # Merchant group (MerchantSidebar)
-│   │   ├── dashboard/page.tsx        # MER-01
-│   │   ├── products/page.tsx         # MER-03
-│   │   ├── products/new/page.tsx     # MER-02
-│   │   └── reservations/page.tsx     # MER-04
+│   │   └── merchant/
+│   │       ├── dashboard/page.tsx    # MER-01 → /merchant/dashboard
+│   │       ├── products/page.tsx     # MER-03 → /merchant/products
+│   │       ├── products/new/page.tsx # MER-02 → /merchant/products/new
+│   │       └── reservations/page.tsx # MER-04 → /merchant/reservations
 │   └── (admin)/                      # Admin group (AdminSidebar)
-│       ├── users/page.tsx            # ADM-01
-│       └── products/page.tsx         # ADM-02
+│       └── admin/
+│           ├── users/page.tsx        # ADM-01 → /admin/users
+│           └── products/page.tsx     # ADM-02 → /admin/products
 ├── components/
 │   ├── ui/                           # shadcn/ui 컴포넌트 (자동 생성)
 │   │   └── EmptyState.tsx            # 커스텀 빈 상태 컴포넌트
