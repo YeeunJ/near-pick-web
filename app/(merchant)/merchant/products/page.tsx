@@ -1,0 +1,89 @@
+import Link from 'next/link'
+import { Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { StatusBadge } from '@/components/features/StatusBadge'
+import { mockProducts } from '@/lib/mock/products'
+import { formatPrice } from '@/lib/utils'
+
+export default function MerchantProductsPage() {
+  return (
+    <div className="space-y-4 max-w-3xl">
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-bold">상품 관리</h1>
+        <Button asChild size="sm" className="gap-1.5 bg-primary hover:bg-primary/90">
+          <Link href="/merchant/products/new">
+            <Plus className="w-4 h-4" />
+            상품 등록
+          </Link>
+        </Button>
+      </div>
+
+      <div className="border border-border rounded-lg overflow-hidden bg-card">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>상품명</TableHead>
+              <TableHead>가격</TableHead>
+              <TableHead>유형</TableHead>
+              <TableHead>상태</TableHead>
+              <TableHead className="text-right">관리</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {mockProducts.map((product) => (
+              <TableRow key={product.id}>
+                <TableCell className="font-medium text-sm">{product.title}</TableCell>
+                <TableCell className="text-sm">{formatPrice(product.price)}</TableCell>
+                <TableCell className="text-sm text-muted-foreground">
+                  {product.productType === 'GENERAL' ? '일반' : '선착순'}
+                </TableCell>
+                <TableCell>
+                  <StatusBadge status={product.status} />
+                </TableCell>
+                <TableCell className="text-right">
+                  {product.status === 'ACTIVE' && (
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="destructive" size="sm">종료</Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>상품 종료</DialogTitle>
+                          <DialogDescription>
+                            &quot;{product.title}&quot; 상품을 종료하시겠습니까?
+                            종료 후에는 소비자에게 노출되지 않습니다.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter className="gap-2">
+                          <Button variant="outline" className="flex-1">취소</Button>
+                          <Button variant="destructive" className="flex-1">종료</Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </div>
+  )
+}
