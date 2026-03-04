@@ -115,3 +115,45 @@ export interface PageResponse<T> {
   totalElements: number
   totalPages: number
 }
+
+// ─── ApiResponse wrapper ──────────────────────────────
+export interface ApiResponse<T> {
+  success: boolean
+  data: T
+  error: string | null
+}
+
+// ─── Request Types ────────────────────────────────────
+export interface LoginRequest {
+  email: string
+  password: string
+}
+
+export interface SignupRequest {
+  email: string
+  password: string
+  role: UserRole
+  shopName?: string
+  businessRegNo?: string
+}
+
+export interface CreateReservationRequest {
+  productId: number
+  visitAt: string
+  quantity: number
+  memo?: string
+}
+
+export interface CreateFlashPurchaseRequest {
+  productId: number
+  quantity: number
+}
+
+export interface CreateProductRequest {
+  title: string
+  description: string
+  price: number
+  productType: ProductType
+  quantity?: number
+  endsAt?: string
+}

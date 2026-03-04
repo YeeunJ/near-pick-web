@@ -1,13 +1,51 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Calendar, ShoppingBag, TrendingUp, Plus } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
 import { StatusBadge } from '@/components/features/StatusBadge'
-import { mockDashboard } from '@/lib/mock/users'
+import { getMerchantDashboard, confirmReservation } from '@/lib/api/merchant'
 import { formatDateTime, formatPrice } from '@/lib/utils'
+import type { MerchantDashboardResponse } from '@/types/api'
 
 export default function MerchantDashboardPage() {
-  const dash = mockDashboard
+  const [dash, setDash] = useState<MerchantDashboardResponse | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getMerchantDashboard()
+      .then(setDash)
+      .finally(() => setLoading(false))
+  }, [])
+
+  async function handleConfirm(id: number) {
+    const result = await confirmReservation(id)
+    setDash((prev) => {
+      if (!prev) return prev
+      return {
+        ...prev,
+        recentReservations: prev.recentReservations.map((r) =>
+          r.id === id ? { ...r, status: result.status } : r,
+        ),
+      }
+    })
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-6 max-w-3xl">
+        <Skeleton className="h-8 w-48" />
+        <div className="grid grid-cols-3 gap-4">
+          {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-24 rounded-xl" />)}
+        </div>
+      </div>
+    )
+  }
+
+  if (!dash) return null
 
   return (
     <div className="space-y-6 max-w-3xl">
@@ -21,44 +59,26 @@ export default function MerchantDashboardPage() {
         </Button>
       </div>
 
-      {/* 통계 카드 */}
       <div className="grid grid-cols-3 gap-4">
-        <Card>
-          <CardHeader className="pb-1 pt-4 px-4">
-            <CardTitle className="text-xs text-muted-foreground font-normal flex items-center gap-1.5">
-              <Calendar className="w-4 h-4" />
-              대기 예약
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="px-4 pb-4">
-            <p className="text-2xl font-bold">{dash.pendingReservationCount}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-1 pt-4 px-4">
-            <CardTitle className="text-xs text-muted-foreground font-normal flex items-center gap-1.5">
-              <ShoppingBag className="w-4 h-4" />
-              오늘 구매
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="px-4 pb-4">
-            <p className="text-2xl font-bold">{dash.todayPurchaseCount}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-1 pt-4 px-4">
-            <CardTitle className="text-xs text-muted-foreground font-normal flex items-center gap-1.5">
-              <TrendingUp className="w-4 h-4" />
-              인기점수
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="px-4 pb-4">
-            <p className="text-2xl font-bold">{dash.totalPopularityScore}</p>
-          </CardContent>
-        </Card>
+        {[
+          { icon: Calendar, label: '대기 예약', value: dash.pendingReservationCount },
+          { icon: ShoppingBag, label: '오늘 구매', value: dash.todayPurchaseCount },
+          { icon: TrendingUp, label: '인기점수', value: dash.totalPopularityScore },
+        ].map(({ icon: Icon, label, value }) => (
+          <Card key={label}>
+            <CardHeader className="pb-1 pt-4 px-4">
+              <CardTitle className="text-xs text-muted-foreground font-normal flex items-center gap-1.5">
+                <Icon className="w-4 h-4" />
+                {label}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 pb-4">
+              <p className="text-2xl font-bold">{value}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      {/* 대기 예약 */}
       {dash.recentReservations.length > 0 && (
         <Card>
           <CardHeader>
@@ -73,14 +93,20 @@ export default function MerchantDashboardPage() {
                     {formatDateTime(r.visitAt)} · {r.quantity}개
                   </p>
                 </div>
-                <StatusBadge status={r.status} />
+                <div className="flex items-center gap-2">
+                  <StatusBadge status={r.status} />
+                  {r.status === 'PENDING' && (
+                    <Button size="sm" className="bg-primary hover:bg-primary/90 h-7 text-xs" onClick={() => handleConfirm(r.id)}>
+                      확정
+                    </Button>
+                  )}
+                </div>
               </div>
             ))}
           </CardContent>
         </Card>
       )}
 
-      {/* 내 상품 */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-base">내 상품</CardTitle>

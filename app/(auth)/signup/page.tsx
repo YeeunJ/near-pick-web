@@ -2,16 +2,44 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { signup } from '@/lib/api/auth'
 import type { UserRole } from '@/types/api'
 
 export default function SignupPage() {
+  const router = useRouter()
   const [role, setRole] = useState<UserRole>('CONSUMER')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [shopName, setShopName] = useState('')
+  const [businessRegNo, setBusinessRegNo] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setError(null)
+    setLoading(true)
+    try {
+      await signup({
+        email,
+        password,
+        role,
+        ...(role === 'MERCHANT' && { shopName, businessRegNo }),
+      })
+      router.push('/login')
+    } catch {
+      setError('회원가입에 실패했습니다. 입력 정보를 확인해주세요.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <Card className="w-full max-w-sm">
@@ -22,66 +50,95 @@ export default function SignupPage() {
         </div>
         <CardTitle className="text-base font-semibold">회원가입</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {/* 역할 선택 */}
-        <div className="space-y-2">
-          <Label>가입 유형</Label>
-          <div className="grid grid-cols-2 gap-2">
-            {(['CONSUMER', 'MERCHANT'] as const).map((r) => (
-              <button
-                key={r}
-                type="button"
-                onClick={() => setRole(r)}
-                className={`py-2 px-3 rounded-lg border text-sm font-medium transition-colors ${
-                  role === r
-                    ? 'bg-primary text-primary-foreground border-primary'
-                    : 'bg-card border-border text-foreground hover:bg-muted'
-                }`}
-              >
-                {r === 'CONSUMER' ? '소비자' : '소상공인'}
-              </button>
-            ))}
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label>가입 유형</Label>
+            <div className="grid grid-cols-2 gap-2">
+              {(['CONSUMER', 'MERCHANT'] as const).map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => setRole(r)}
+                  className={`py-2 px-3 rounded-lg border text-sm font-medium transition-colors ${
+                    role === r
+                      ? 'bg-primary text-primary-foreground border-primary'
+                      : 'bg-card border-border text-foreground hover:bg-muted'
+                  }`}
+                >
+                  {r === 'CONSUMER' ? '소비자' : '소상공인'}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email">이메일</Label>
-          <Input id="email" type="email" placeholder="example@email.com" />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="password">비밀번호</Label>
-          <Input id="password" type="password" placeholder="8자 이상 입력" />
-        </div>
+          <div className="space-y-2">
+            <Label htmlFor="email">이메일</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="example@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">비밀번호</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="8자 이상 입력"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-        {/* 소상공인 추가 정보 */}
-        {role === 'MERCHANT' && (
-          <>
-            <Separator />
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-              가게 정보
-            </p>
-            <div className="space-y-2">
-              <Label htmlFor="shopName">가게명</Label>
-              <Input id="shopName" placeholder="역삼 커피랩" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="bizNo">사업자 번호</Label>
-              <Input id="bizNo" placeholder="000-00-00000" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="shopAddress">가게 주소</Label>
-              <Input id="shopAddress" placeholder="서울 강남구 역삼동 123" />
-            </div>
-          </>
-        )}
+          {role === 'MERCHANT' && (
+            <>
+              <Separator />
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                가게 정보
+              </p>
+              <div className="space-y-2">
+                <Label htmlFor="shopName">가게명</Label>
+                <Input
+                  id="shopName"
+                  placeholder="역삼 커피랩"
+                  value={shopName}
+                  onChange={(e) => setShopName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="bizNo">사업자 번호</Label>
+                <Input
+                  id="bizNo"
+                  placeholder="000-00-00000"
+                  value={businessRegNo}
+                  onChange={(e) => setBusinessRegNo(e.target.value)}
+                  required
+                />
+              </div>
+            </>
+          )}
 
-        <Button className="w-full bg-primary hover:bg-primary/90">가입하기</Button>
-        <p className="text-center text-sm text-muted-foreground">
-          이미 계정이 있으신가요?{' '}
-          <Link href="/login" className="text-primary font-medium hover:underline">
-            로그인 →
-          </Link>
-        </p>
+          {error && <p className="text-sm text-destructive">{error}</p>}
+          <Button
+            type="submit"
+            className="w-full bg-primary hover:bg-primary/90"
+            disabled={loading}
+          >
+            {loading ? '처리 중...' : '가입하기'}
+          </Button>
+          <p className="text-center text-sm text-muted-foreground">
+            이미 계정이 있으신가요?{' '}
+            <Link href="/login" className="text-primary font-medium hover:underline">
+              로그인 →
+            </Link>
+          </p>
+        </form>
       </CardContent>
     </Card>
   )
