@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Geist } from 'next/font/google'
+import { AuthInitializer } from '@/components/AuthInitializer'
 import './globals.css'
 
 const geistSans = Geist({
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${geistSans.variable} font-sans antialiased`}>
+        <AuthInitializer />
         {children}
       </body>
     </html>
