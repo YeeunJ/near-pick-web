@@ -1,28 +1,17 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Skeleton } from '@/components/ui/skeleton'
 import { StatusBadge } from '@/components/features/StatusBadge'
-import { mockUsers } from '@/lib/mock/users'
+import { getAdminUsers, suspendUser, deleteUser } from '@/lib/api/admin'
 import { formatDate } from '@/lib/utils'
-import type { UserRole } from '@/types/api'
+import type { UserRole, UserStatus, UserSummary } from '@/types/api'
 
 const TABS: { value: UserRole | 'ALL'; label: string }[] = [
   { value: 'ALL', label: '전체' },
@@ -31,104 +20,142 @@ const TABS: { value: UserRole | 'ALL'; label: string }[] = [
 ]
 
 export default function AdminUsersPage() {
+  const [users, setUsers] = useState<UserSummary[]>([])
+  const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
+
+  useEffect(() => {
+    getAdminUsers()
+      .then(setUsers)
+      .finally(() => setLoading(false))
+  }, [])
+
+  async function handleSuspend(id: number) {
+    await suspendUser(id)
+    setUsers((prev) =>
+      prev.map((u) => (u.userId === id ? { ...u, status: 'SUSPENDED' as UserStatus } : u)),
+    )
+  }
+
+  async function handleDelete(id: number) {
+    await deleteUser(id)
+    setUsers((prev) => prev.filter((u) => u.userId !== id))
+  }
+
+  const filtered = users.filter((u) =>
+    u.email.toLowerCase().includes(search.toLowerCase()),
+  )
+
   return (
     <div className="space-y-4 max-w-4xl">
       <h1 className="text-xl font-bold">사용자 관리</h1>
 
-      {/* 검색 */}
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-        <Input className="pl-9" placeholder="이메일로 검색" />
+        <Input
+          className="pl-9"
+          placeholder="이메일로 검색"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </div>
 
-      <Tabs defaultValue="ALL">
-        <TabsList>
-          {TABS.map((tab) => (
-            <TabsTrigger key={tab.value} value={tab.value}>{tab.label}</TabsTrigger>
-          ))}
-        </TabsList>
+      {loading ? (
+        <Skeleton className="h-48 rounded-xl" />
+      ) : (
+        <Tabs defaultValue="ALL">
+          <TabsList>
+            {TABS.map((tab) => (
+              <TabsTrigger key={tab.value} value={tab.value}>{tab.label}</TabsTrigger>
+            ))}
+          </TabsList>
 
-        {TABS.map((tab) => {
-          const items =
-            tab.value === 'ALL'
-              ? mockUsers
-              : mockUsers.filter((u) => u.role === tab.value)
-          return (
-            <TabsContent key={tab.value} value={tab.value} className="mt-4">
-              <div className="border border-border rounded-lg overflow-hidden bg-card">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>이메일</TableHead>
-                      <TableHead>역할</TableHead>
-                      <TableHead>상태</TableHead>
-                      <TableHead>가입일</TableHead>
-                      <TableHead className="text-right">관리</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {items.map((user) => (
-                      <TableRow key={user.userId}>
-                        <TableCell className="text-sm">{user.email}</TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          {user.role === 'CONSUMER' ? '소비자' : '소상공인'}
-                        </TableCell>
-                        <TableCell>
-                          <StatusBadge status={user.status} />
-                        </TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          {formatDate(user.createdAt)}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex gap-1.5 justify-end">
-                            {user.status === 'ACTIVE' && (
+          {TABS.map((tab) => {
+            const items = tab.value === 'ALL' ? filtered : filtered.filter((u) => u.role === tab.value)
+            return (
+              <TabsContent key={tab.value} value={tab.value} className="mt-4">
+                <div className="border border-border rounded-lg overflow-hidden bg-card">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>이메일</TableHead>
+                        <TableHead>역할</TableHead>
+                        <TableHead>상태</TableHead>
+                        <TableHead>가입일</TableHead>
+                        <TableHead className="text-right">관리</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {items.map((user) => (
+                        <TableRow key={user.userId}>
+                          <TableCell className="text-sm">{user.email}</TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {user.role === 'CONSUMER' ? '소비자' : '소상공인'}
+                          </TableCell>
+                          <TableCell><StatusBadge status={user.status} /></TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {formatDate(user.createdAt)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex gap-1.5 justify-end">
+                              {user.status === 'ACTIVE' && (
+                                <Dialog>
+                                  <DialogTrigger asChild>
+                                    <Button variant="outline" size="sm">정지</Button>
+                                  </DialogTrigger>
+                                  <DialogContent>
+                                    <DialogHeader>
+                                      <DialogTitle>사용자 정지</DialogTitle>
+                                      <DialogDescription>{user.email} 계정을 정지하시겠습니까?</DialogDescription>
+                                    </DialogHeader>
+                                    <DialogFooter className="gap-2">
+                                      <Button variant="outline" className="flex-1">취소</Button>
+                                      <Button
+                                        variant="destructive"
+                                        className="flex-1"
+                                        onClick={() => handleSuspend(user.userId)}
+                                      >
+                                        정지
+                                      </Button>
+                                    </DialogFooter>
+                                  </DialogContent>
+                                </Dialog>
+                              )}
                               <Dialog>
                                 <DialogTrigger asChild>
-                                  <Button variant="outline" size="sm">정지</Button>
+                                  <Button variant="destructive" size="sm">탈퇴</Button>
                                 </DialogTrigger>
                                 <DialogContent>
                                   <DialogHeader>
-                                    <DialogTitle>사용자 정지</DialogTitle>
+                                    <DialogTitle>회원 탈퇴 처리</DialogTitle>
                                     <DialogDescription>
-                                      {user.email} 계정을 정지하시겠습니까?
+                                      {user.email} 계정을 탈퇴 처리하시겠습니까? 이 작업은 되돌릴 수 없습니다.
                                     </DialogDescription>
                                   </DialogHeader>
                                   <DialogFooter className="gap-2">
                                     <Button variant="outline" className="flex-1">취소</Button>
-                                    <Button variant="destructive" className="flex-1">정지</Button>
+                                    <Button
+                                      variant="destructive"
+                                      className="flex-1"
+                                      onClick={() => handleDelete(user.userId)}
+                                    >
+                                      탈퇴
+                                    </Button>
                                   </DialogFooter>
                                 </DialogContent>
                               </Dialog>
-                            )}
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button variant="destructive" size="sm">탈퇴</Button>
-                              </DialogTrigger>
-                              <DialogContent>
-                                <DialogHeader>
-                                  <DialogTitle>회원 탈퇴 처리</DialogTitle>
-                                  <DialogDescription>
-                                    {user.email} 계정을 탈퇴 처리하시겠습니까?
-                                    이 작업은 되돌릴 수 없습니다.
-                                  </DialogDescription>
-                                </DialogHeader>
-                                <DialogFooter className="gap-2">
-                                  <Button variant="outline" className="flex-1">취소</Button>
-                                  <Button variant="destructive" className="flex-1">탈퇴</Button>
-                                </DialogFooter>
-                              </DialogContent>
-                            </Dialog>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </TabsContent>
-          )
-        })}
-      </Tabs>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </TabsContent>
+            )
+          })}
+        </Tabs>
+      )}
     </div>
   )
 }

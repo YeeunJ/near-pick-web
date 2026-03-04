@@ -1,16 +1,47 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import { Heart, MapPin, Trash2 } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { mockWishlists } from '@/lib/mock/reservations'
+import { Skeleton } from '@/components/ui/skeleton'
+import { getWishlist, removeWishlist } from '@/lib/api/wishlist'
 import { formatPrice } from '@/lib/utils'
+import type { WishlistItem } from '@/types/api'
 
 export default function WishlistPage() {
+  const [items, setItems] = useState<WishlistItem[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getWishlist()
+      .then(setItems)
+      .finally(() => setLoading(false))
+  }, [])
+
+  async function handleRemove(productId: number) {
+    await removeWishlist(productId)
+    setItems((prev) => prev.filter((i) => i.productId !== productId))
+  }
+
   return (
     <div className="flex flex-col">
       <PageHeader title="찜 목록" showBack />
-      {mockWishlists.length === 0 ? (
+      {loading ? (
+        <div className="divide-y divide-border">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-3 p-4">
+              <Skeleton className="w-16 h-16 rounded-lg" />
+              <div className="flex-1 space-y-2">
+                <Skeleton className="h-4 w-2/3" />
+                <Skeleton className="h-4 w-1/3" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : items.length === 0 ? (
         <EmptyState
           icon={Heart}
           title="찜한 상품이 없어요"
@@ -19,7 +50,7 @@ export default function WishlistPage() {
         />
       ) : (
         <ul className="divide-y divide-border">
-          {mockWishlists.map((item) => (
+          {items.map((item) => (
             <li key={item.productId} className="flex items-center gap-3 p-4">
               <div className="w-16 h-16 bg-muted rounded-lg shrink-0 flex items-center justify-center text-xs text-muted-foreground">
                 이미지
@@ -36,7 +67,12 @@ export default function WishlistPage() {
                 {item.productType === 'FLASH_SALE' && (
                   <Badge variant="destructive" className="text-xs px-1.5 py-0.5">FLASH</Badge>
                 )}
-                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-destructive">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                  onClick={() => handleRemove(item.productId)}
+                >
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
