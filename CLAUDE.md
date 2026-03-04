@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code when working in this repository.
 
+- **Conventions**: `CONVENTIONS.md` (커밋, 브랜치, PR, 네이밍 규칙)
+
 ## Project Overview
 
 `near-pick-web` is the **frontend** for the NearPick platform.
