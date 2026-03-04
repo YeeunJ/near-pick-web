@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-03-04T10:53:05.420Z",
+  "lastUpdated": "2026-03-04T16:07:22.818Z",
   "activeFeatures": [
     "phase6-ui-integration",
     "near-pick-web",
@@ -23,29 +23,20 @@
   "primaryFeature": "phase6-ui-integration",
   "features": {
     "phase5-design-system": {
-      "phase": "completed",
-      "phaseNumber": 5,
+      "phase": "archived",
       "matchRate": 95,
       "iterationCount": 0,
-      "timestamps": {
-        "started": "2026-02-27T19:22:16.420Z",
-        "lastUpdated": "2026-02-28T00:00:00.000Z"
-      }
+      "startedAt": "2026-02-27T19:22:16.420Z",
+      "archivedAt": "2026-03-05T00:00:00.000Z",
+      "archivedTo": "docs/archive/2026-03/phase5-design-system/"
     },
     "phase6-ui-integration": {
-      "phase": "design",
-      "phaseNumber": 6,
-      "matchRate": null,
+      "phase": "archived",
+      "matchRate": 93,
       "iterationCount": 0,
-      "requirements": [],
-      "documents": {
-        "plan": "docs/01-plan/features/phase6-ui-integration.plan.md",
-        "design": "docs/02-design/features/phase6-ui-integration.design.md"
-      },
-      "timestamps": {
-        "started": "2026-03-04T00:00:00.000Z",
-        "lastUpdated": "2026-03-04T00:00:00.000Z"
-      }
+      "startedAt": "2026-03-04T00:00:00.000Z",
+      "archivedAt": "2026-03-05T00:00:00.000Z",
+      "archivedTo": "docs/archive/2026-03/phase6-ui-integration/"
     },
     "near-pick-web": {
       "phase": "do",
@@ -56,9 +47,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-04T10:45:19.165Z",
-        "lastUpdated": "2026-03-04T10:53:05.420Z"
+        "lastUpdated": "2026-03-04T16:07:22.818Z"
       },
-      "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/proxy.ts"
+      "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/app/layout.tsx"
     },
     "api": {
       "phase": "do",
@@ -266,7 +257,7 @@
   "session": {
     "startedAt": "2026-03-04T00:00:00.000Z",
     "onboardingCompleted": true,
-    "lastActivity": "2026-03-04T10:53:05.420Z"
+    "lastActivity": "2026-03-04T16:07:22.818Z"
   },
   "history": [
     {
@@ -445,6 +436,30 @@
     },
     {
       "timestamp": "2026-03-04T10:53:05.420Z",
+      "feature": "near-pick-web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-04T10:58:26.703Z",
+      "feature": "phase6-ui-integration",
+      "phase": "report",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-04T16:07:15.859Z",
+      "feature": "near-pick-web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-04T16:07:19.371Z",
+      "feature": "near-pick-web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-04T16:07:22.818Z",
       "feature": "near-pick-web",
       "phase": "do",
       "action": "updated"
