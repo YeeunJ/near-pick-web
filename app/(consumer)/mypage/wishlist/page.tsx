@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Heart, MapPin, Trash2 } from 'lucide-react'
+import { Heart, Trash2 } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/button'
@@ -51,17 +51,13 @@ export default function WishlistPage() {
       ) : (
         <ul className="divide-y divide-border">
           {items.map((item) => (
-            <li key={item.productId} className="flex items-center gap-3 p-4">
+            <li key={item.wishlistId} className="flex items-center gap-3 p-4">
               <div className="w-16 h-16 bg-muted rounded-lg shrink-0 flex items-center justify-center text-xs text-muted-foreground">
                 이미지
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-sm line-clamp-1">{item.title}</p>
-                <p className="text-primary font-bold text-sm mt-0.5">{formatPrice(item.price)}</p>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
-                  <MapPin className="w-3 h-3" />
-                  <span className="truncate">{item.shopAddress}</span>
-                </div>
+                <p className="font-medium text-sm line-clamp-1">{item.productTitle}</p>
+                <p className="text-primary font-bold text-sm mt-0.5">{formatPrice(item.productPrice)}</p>
               </div>
               <div className="flex flex-col items-end gap-1 shrink-0">
                 {item.productType === 'FLASH_SALE' && (

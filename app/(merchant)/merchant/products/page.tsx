@@ -10,10 +10,10 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { StatusBadge } from '@/components/features/StatusBadge'
 import { getMerchantProducts, closeProduct } from '@/lib/api/merchant'
 import { formatPrice } from '@/lib/utils'
-import type { ProductSummaryResponse } from '@/types/api'
+import type { ProductListItem } from '@/types/api'
 
 export default function MerchantProductsPage() {
-  const [products, setProducts] = useState<ProductSummaryResponse[]>([])
+  const [products, setProducts] = useState<ProductListItem[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

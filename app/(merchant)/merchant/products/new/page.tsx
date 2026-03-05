@@ -17,8 +17,8 @@ export default function NewProductPage() {
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
   const [description, setDescription] = useState('')
-  const [quantity, setQuantity] = useState('')
-  const [endsAt, setEndsAt] = useState('')
+  const [stock, setStock] = useState('')
+  const [availableUntil, setAvailableUntil] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
@@ -33,8 +33,8 @@ export default function NewProductPage() {
         price: Number(price),
         productType,
         ...(productType === 'FLASH_SALE' && {
-          quantity: Number(quantity),
-          endsAt: endsAt ? `${endsAt}:00` : undefined,
+          stock: Number(stock),
+          availableUntil: availableUntil ? `${availableUntil}:00` : undefined,
         }),
       })
       router.push('/merchant/products')
@@ -117,24 +117,24 @@ export default function NewProductPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="quantity">수량</Label>
+                <Label htmlFor="stock">수량</Label>
                 <Input
-                  id="quantity"
+                  id="stock"
                   type="number"
                   placeholder="10"
                   min={1}
-                  value={quantity}
-                  onChange={(e) => setQuantity(e.target.value)}
+                  value={stock}
+                  onChange={(e) => setStock(e.target.value)}
                   required
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="endsAt">종료 일시</Label>
+                <Label htmlFor="availableUntil">종료 일시</Label>
                 <Input
-                  id="endsAt"
+                  id="availableUntil"
                   type="datetime-local"
-                  value={endsAt}
-                  onChange={(e) => setEndsAt(e.target.value)}
+                  value={availableUntil}
+                  onChange={(e) => setAvailableUntil(e.target.value)}
                   required
                 />
               </div>

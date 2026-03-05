@@ -1,6 +1,4 @@
-import type { UserSummary, MerchantDashboardResponse } from '@/types/api'
-import { mockReservations } from './reservations'
-import { mockProducts } from './products'
+import type { UserSummary, MerchantDashboardResponse, ProductListItem } from '@/types/api'
 
 export const mockUsers: UserSummary[] = [
   {
@@ -33,11 +31,41 @@ export const mockUsers: UserSummary[] = [
   },
 ]
 
+const mockProductListItems: ProductListItem[] = [
+  {
+    id: 1,
+    title: '아메리카노 (당일 할인)',
+    price: 2500,
+    status: 'ACTIVE',
+    productType: 'GENERAL',
+    stock: 10,
+    wishlistCount: 12,
+  },
+  {
+    id: 2,
+    title: '딸기 케이크 선착순',
+    price: 5900,
+    status: 'ACTIVE',
+    productType: 'FLASH_SALE',
+    stock: 8,
+    wishlistCount: 24,
+  },
+  {
+    id: 3,
+    title: '수제 버거 세트',
+    price: 12000,
+    status: 'ACTIVE',
+    productType: 'GENERAL',
+    stock: 5,
+    wishlistCount: 8,
+  },
+]
+
 export const mockDashboard: MerchantDashboardResponse = {
-  shopName: '역삼 커피랩',
-  pendingReservationCount: 3,
-  todayPurchaseCount: 5,
+  merchantId: 2,
+  businessName: '역삼 커피랩',
+  thisMonthReservationCount: 3,
+  thisMonthPurchaseCount: 5,
   totalPopularityScore: 127,
-  recentReservations: mockReservations.filter((r) => r.status === 'PENDING'),
-  myProducts: mockProducts.slice(0, 3),
+  products: mockProductListItems,
 }

@@ -1,4 +1,9 @@
-import type { ApiResponse } from '@/types/api'
+import type { ApiResponse, UserRole } from '@/types/api'
+
+export function decodeJwt(token: string): { userId: number; role: UserRole } {
+  const payload = JSON.parse(atob(token.split('.')[1]))
+  return { userId: Number(payload.sub), role: payload.role as UserRole }
+}
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8080/api'
 

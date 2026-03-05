@@ -26,41 +26,58 @@ export interface ProductSummaryResponse {
   price: number
   productType: ProductType
   status: ProductStatus
-  shopAddress: string
-  shopLat: number
-  shopLng: number
   popularityScore: number
-  remainingQuantity?: number
-  distanceKm?: number
+  distanceKm: number
+  merchantName: string
 }
 
-export interface ProductDetailResponse extends ProductSummaryResponse {
-  description: string
-  merchantId: number
+export interface ProductListItem {
+  id: number
+  title: string
+  price: number
+  status: ProductStatus
+  productType: ProductType
+  stock: number
+  wishlistCount: number
+}
+
+export interface ProductDetailResponse {
+  id: number
+  title: string
+  description: string | null
+  price: number
+  productType: ProductType
+  status: ProductStatus
+  stock: number
+  availableFrom: string | null
+  availableUntil: string | null
+  shopLat: number
+  shopLng: number
+  shopAddress: string | null
+  merchantName: string
   wishlistCount: number
   reservationCount: number
   purchaseCount: number
-  endsAt?: string
 }
 
 // ─── Wishlist ─────────────────────────────────────
 export interface WishlistItem {
+  wishlistId: number
   productId: number
-  title: string
-  price: number
-  shopAddress: string
+  productTitle: string
+  productPrice: number
   productType: ProductType
-  status: ProductStatus
+  createdAt: string
 }
 
 // ─── Reservation ──────────────────────────────────
 export interface ReservationItem {
-  id: number
+  reservationId: number
   productId: number
   productTitle: string
   quantity: number
-  visitAt: string
-  memo?: string
+  visitScheduledAt: string | null
+  reservedAt: string
   status: ReservationStatus
 }
 
@@ -71,31 +88,34 @@ export interface ReservationStatusResponse {
 
 // ─── FlashPurchase ────────────────────────────────
 export interface FlashPurchaseItem {
-  id: number
+  purchaseId: number
   productId: number
   productTitle: string
   quantity: number
-  purchasedAt: string
   status: FlashPurchaseStatus
+  purchasedAt: string
 }
 
 // ─── Merchant ─────────────────────────────────────
 export interface MerchantDashboardResponse {
-  shopName: string
-  pendingReservationCount: number
-  todayPurchaseCount: number
+  merchantId: number
+  businessName: string
   totalPopularityScore: number
-  recentReservations: ReservationItem[]
-  myProducts: ProductSummaryResponse[]
+  thisMonthReservationCount: number
+  thisMonthPurchaseCount: number
+  products: ProductListItem[]
 }
 
 export interface MerchantProfileResponse {
-  userId: number
-  shopName: string
+  merchantId: number
+  email: string
+  businessName: string
   businessRegNo: string
-  shopAddress: string
   shopLat: number
   shopLng: number
+  shopAddress: string | null
+  rating: number
+  isVerified: boolean
 }
 
 // ─── Admin ────────────────────────────────────────
@@ -104,6 +124,15 @@ export interface UserSummary {
   email: string
   role: UserRole
   status: UserStatus
+  createdAt: string
+}
+
+export interface AdminProductItem {
+  productId: number
+  title: string
+  merchantId: number
+  merchantName: string
+  status: ProductStatus
   createdAt: string
 }
 
@@ -129,17 +158,24 @@ export interface LoginRequest {
   password: string
 }
 
-export interface SignupRequest {
+export interface SignupConsumerRequest {
   email: string
   password: string
-  role: UserRole
-  shopName?: string
-  businessRegNo?: string
+}
+
+export interface SignupMerchantRequest {
+  email: string
+  password: string
+  businessName: string
+  businessRegNo: string
+  shopAddress: string
+  shopLat: number
+  shopLng: number
 }
 
 export interface CreateReservationRequest {
   productId: number
-  visitAt: string
+  visitScheduledAt?: string
   quantity: number
   memo?: string
 }
@@ -151,9 +187,9 @@ export interface CreateFlashPurchaseRequest {
 
 export interface CreateProductRequest {
   title: string
-  description: string
+  description?: string
   price: number
   productType: ProductType
-  quantity?: number
-  endsAt?: string
+  stock?: number
+  availableUntil?: string
 }

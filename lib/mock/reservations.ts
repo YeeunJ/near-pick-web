@@ -2,35 +2,37 @@ import type { ReservationItem, FlashPurchaseItem, WishlistItem } from '@/types/a
 
 export const mockReservations: ReservationItem[] = [
   {
-    id: 1,
+    reservationId: 1,
     productId: 1,
     productTitle: '아메리카노 (당일 할인)',
     quantity: 2,
-    visitAt: '2026-03-01T14:00:00',
-    memo: '테이크아웃으로 부탁드립니다',
+    visitScheduledAt: '2026-03-01T14:00:00',
+    reservedAt: '2026-02-28T10:00:00',
     status: 'PENDING',
   },
   {
-    id: 2,
+    reservationId: 2,
     productId: 3,
     productTitle: '수제 버거 세트',
     quantity: 1,
-    visitAt: '2026-03-02T12:30:00',
+    visitScheduledAt: '2026-03-02T12:30:00',
+    reservedAt: '2026-02-28T11:00:00',
     status: 'CONFIRMED',
   },
   {
-    id: 3,
+    reservationId: 3,
     productId: 5,
     productTitle: '오늘의 런치 특선',
     quantity: 2,
-    visitAt: '2026-02-20T13:00:00',
+    visitScheduledAt: '2026-02-20T13:00:00',
+    reservedAt: '2026-02-19T09:00:00',
     status: 'CANCELLED',
   },
 ]
 
 export const mockPurchases: FlashPurchaseItem[] = [
   {
-    id: 1,
+    purchaseId: 1,
     productId: 2,
     productTitle: '딸기 케이크 선착순',
     quantity: 1,
@@ -38,7 +40,7 @@ export const mockPurchases: FlashPurchaseItem[] = [
     status: 'COMPLETED',
   },
   {
-    id: 2,
+    purchaseId: 2,
     productId: 4,
     productTitle: '마카롱 6개 선착순',
     quantity: 2,
@@ -49,19 +51,19 @@ export const mockPurchases: FlashPurchaseItem[] = [
 
 export const mockWishlists: WishlistItem[] = [
   {
+    wishlistId: 1,
     productId: 3,
-    title: '수제 버거 세트',
-    price: 12000,
-    shopAddress: '서울 강남구 논현동 88',
+    productTitle: '수제 버거 세트',
+    productPrice: 12000,
     productType: 'GENERAL',
-    status: 'ACTIVE',
+    createdAt: '2026-02-20T10:00:00',
   },
   {
+    wishlistId: 2,
     productId: 5,
-    title: '오늘의 런치 특선',
-    price: 9500,
-    shopAddress: '서울 강남구 역삼동 200',
+    productTitle: '오늘의 런치 특선',
+    productPrice: 9500,
     productType: 'GENERAL',
-    status: 'ACTIVE',
+    createdAt: '2026-02-21T11:00:00',
   },
 ]

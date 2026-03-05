@@ -40,11 +40,6 @@ export function ProductCard({ product }: ProductCardProps) {
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
             <span>{product.popularityScore}</span>
-            {product.remainingQuantity !== undefined && (
-              <span className="ml-auto text-destructive font-medium">
-                잔여 {product.remainingQuantity}개
-              </span>
-            )}
           </div>
         </CardContent>
       </Card>

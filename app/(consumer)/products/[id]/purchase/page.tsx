@@ -44,7 +44,7 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
   }
 
   const qty = Number(quantity)
-  const maxQty = Math.min(product?.remainingQuantity ?? 5, 10)
+  const maxQty = Math.min(product?.stock ?? 5, 10)
   const QUANTITY_OPTIONS = Array.from({ length: maxQty }, (_, i) => i + 1)
 
   return (
@@ -58,10 +58,10 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
             <CardContent className="p-4 space-y-2">
               <p className="font-semibold">{product.title}</p>
               <p className="text-primary font-bold">{formatPrice(product.price)}</p>
-              {product.remainingQuantity !== undefined && (
+              {product.stock !== undefined && (
                 <Badge variant="destructive" className="gap-1">
                   <Zap className="w-3 h-3" />
-                  남은 수량: {product.remainingQuantity}개
+                  남은 수량: {product.stock}개
                 </Badge>
               )}
             </CardContent>

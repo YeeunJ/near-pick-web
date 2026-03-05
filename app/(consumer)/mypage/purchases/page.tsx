@@ -32,7 +32,7 @@ export default function PurchasesPage() {
       ) : (
         <ul className="divide-y divide-border">
           {items.map((item) => (
-            <li key={item.id} className="p-4 space-y-1.5">
+            <li key={item.purchaseId} className="p-4 space-y-1.5">
               <div className="flex items-start justify-between gap-2">
                 <p className="font-medium text-sm">{item.productTitle}</p>
                 <StatusBadge status={item.status} />

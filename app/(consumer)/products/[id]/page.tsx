@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { MapPin, Heart, Calendar, Zap, Star, ShoppingBag } from 'lucide-react'
+import { MapPin, Heart, Calendar, Zap, ShoppingBag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
@@ -87,13 +87,13 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
             <StatusBadge status={product.status} />
           </div>
           <p className="text-2xl font-bold text-primary">{formatPrice(product.price)}</p>
-          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            <MapPin className="w-4 h-4" />
-            <span>{product.shopAddress}</span>
-          </div>
-          {product.distanceKm !== undefined && (
-            <p className="text-sm text-muted-foreground">{product.distanceKm.toFixed(1)}km 거리</p>
+          {product.shopAddress && (
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+              <MapPin className="w-4 h-4" />
+              <span>{product.shopAddress}</span>
+            </div>
           )}
+          <p className="text-sm text-muted-foreground">{product.merchantName}</p>
         </div>
 
         <Separator />
@@ -111,16 +111,12 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
             <ShoppingBag className="w-4 h-4" />
             <span>{product.purchaseCount}</span>
           </div>
-          <div className="flex items-center gap-1 text-muted-foreground ml-auto">
-            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-            <span>{product.popularityScore}</span>
-          </div>
         </div>
 
-        {product.productType === 'FLASH_SALE' && product.remainingQuantity !== undefined && (
+        {product.productType === 'FLASH_SALE' && product.stock !== undefined && (
           <Badge variant="destructive" className="gap-1">
             <Zap className="w-3 h-3" />
-            남은 수량: {product.remainingQuantity}개
+            남은 수량: {product.stock}개
           </Badge>
         )}
 
