@@ -7,8 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { StatusBadge } from '@/components/features/StatusBadge'
-import { getMerchantDashboard, confirmReservation } from '@/lib/api/merchant'
-import { formatDateTime, formatPrice } from '@/lib/utils'
+import { getMerchantDashboard } from '@/lib/api/merchant'
+import { formatPrice } from '@/lib/utils'
 import type { MerchantDashboardResponse } from '@/types/api'
 
 export default function MerchantDashboardPage() {
@@ -20,19 +20,6 @@ export default function MerchantDashboardPage() {
       .then(setDash)
       .finally(() => setLoading(false))
   }, [])
-
-  async function handleConfirm(id: number) {
-    const result = await confirmReservation(id)
-    setDash((prev) => {
-      if (!prev) return prev
-      return {
-        ...prev,
-        recentReservations: prev.recentReservations.map((r) =>
-          r.id === id ? { ...r, status: result.status } : r,
-        ),
-      }
-    })
-  }
 
   if (loading) {
     return (
@@ -50,7 +37,7 @@ export default function MerchantDashboardPage() {
   return (
     <div className="space-y-6 max-w-3xl">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-bold">안녕하세요, {dash.shopName}!</h1>
+        <h1 className="text-xl font-bold">안녕하세요, {dash.businessName}!</h1>
         <Button asChild size="sm" className="gap-1.5 bg-primary hover:bg-primary/90">
           <Link href="/merchant/products/new">
             <Plus className="w-4 h-4" />
@@ -61,8 +48,8 @@ export default function MerchantDashboardPage() {
 
       <div className="grid grid-cols-3 gap-4">
         {[
-          { icon: Calendar, label: '대기 예약', value: dash.pendingReservationCount },
-          { icon: ShoppingBag, label: '오늘 구매', value: dash.todayPurchaseCount },
+          { icon: Calendar, label: '이번달 예약', value: dash.thisMonthReservationCount },
+          { icon: ShoppingBag, label: '이번달 구매', value: dash.thisMonthPurchaseCount },
           { icon: TrendingUp, label: '인기점수', value: dash.totalPopularityScore },
         ].map(({ icon: Icon, label, value }) => (
           <Card key={label}>
@@ -79,34 +66,6 @@ export default function MerchantDashboardPage() {
         ))}
       </div>
 
-      {dash.recentReservations.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">대기 중인 예약</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {dash.recentReservations.map((r) => (
-              <div key={r.id} className="flex items-center justify-between gap-2">
-                <div>
-                  <p className="text-sm font-medium">{r.productTitle}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {formatDateTime(r.visitAt)} · {r.quantity}개
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <StatusBadge status={r.status} />
-                  {r.status === 'PENDING' && (
-                    <Button size="sm" className="bg-primary hover:bg-primary/90 h-7 text-xs" onClick={() => handleConfirm(r.id)}>
-                      확정
-                    </Button>
-                  )}
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
-
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-base">내 상품</CardTitle>
@@ -115,15 +74,19 @@ export default function MerchantDashboardPage() {
           </Button>
         </CardHeader>
         <CardContent className="space-y-3">
-          {dash.myProducts.map((p) => (
-            <div key={p.id} className="flex items-center justify-between gap-2">
-              <div>
-                <p className="text-sm font-medium">{p.title}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">{formatPrice(p.price)}</p>
+          {dash.products.length === 0 ? (
+            <p className="text-sm text-muted-foreground">등록된 상품이 없어요.</p>
+          ) : (
+            dash.products.map((p) => (
+              <div key={p.id} className="flex items-center justify-between gap-2">
+                <div>
+                  <p className="text-sm font-medium">{p.title}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{formatPrice(p.price)}</p>
+                </div>
+                <StatusBadge status={p.status} />
               </div>
-              <StatusBadge status={p.status} />
-            </div>
-          ))}
+            ))
+          )}
         </CardContent>
       </Card>
     </div>

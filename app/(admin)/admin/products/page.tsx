@@ -8,8 +8,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { StatusBadge } from '@/components/features/StatusBadge'
 import { getAdminProducts, forceCloseProduct } from '@/lib/api/admin'
-import { formatPrice } from '@/lib/utils'
-import type { ProductSummaryResponse, ProductStatus } from '@/types/api'
+import { formatDateTime } from '@/lib/utils'
+import type { AdminProductItem, ProductStatus } from '@/types/api'
 
 const TABS: { value: ProductStatus | 'ALL'; label: string }[] = [
   { value: 'ALL', label: '전체' },
@@ -18,7 +18,7 @@ const TABS: { value: ProductStatus | 'ALL'; label: string }[] = [
 ]
 
 export default function AdminProductsPage() {
-  const [products, setProducts] = useState<ProductSummaryResponse[]>([])
+  const [products, setProducts] = useState<AdminProductItem[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function AdminProductsPage() {
   async function handleForceClose(id: number) {
     await forceCloseProduct(id)
     setProducts((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, status: 'CLOSED' as const } : p)),
+      prev.map((p) => (p.productId === id ? { ...p, status: 'CLOSED' as const } : p)),
     )
   }
 
@@ -57,22 +57,22 @@ export default function AdminProductsPage() {
                     <TableHeader>
                       <TableRow>
                         <TableHead>상품명</TableHead>
-                        <TableHead>가게 주소</TableHead>
-                        <TableHead>가격</TableHead>
+                        <TableHead>소상공인</TableHead>
                         <TableHead>상태</TableHead>
+                        <TableHead>등록일</TableHead>
                         <TableHead className="text-right">관리</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {items.map((product) => (
-                        <TableRow key={product.id}>
+                        <TableRow key={product.productId}>
                           <TableCell className="font-medium text-sm">{product.title}</TableCell>
-                          <TableCell className="text-sm text-muted-foreground max-w-[200px] truncate">
-                            {product.shopAddress}
-                          </TableCell>
-                          <TableCell className="text-sm">{formatPrice(product.price)}</TableCell>
+                          <TableCell className="text-sm text-muted-foreground">{product.merchantName}</TableCell>
                           <TableCell>
                             <StatusBadge status={product.status} />
+                          </TableCell>
+                          <TableCell className="text-sm text-muted-foreground">
+                            {formatDateTime(product.createdAt)}
                           </TableCell>
                           <TableCell className="text-right">
                             {product.status === 'ACTIVE' && (
@@ -93,7 +93,7 @@ export default function AdminProductsPage() {
                                     <Button
                                       variant="destructive"
                                       className="flex-1"
-                                      onClick={() => handleForceClose(product.id)}
+                                      onClick={() => handleForceClose(product.productId)}
                                     >
                                       강제종료
                                     </Button>

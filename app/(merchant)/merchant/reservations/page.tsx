@@ -30,7 +30,7 @@ export default function MerchantReservationsPage() {
   async function handleConfirm(id: number) {
     const result = await confirmReservation(id)
     setItems((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, status: result.status } : r)),
+      prev.map((r) => (r.reservationId === id ? { ...r, status: result.status } : r)),
     )
   }
 
@@ -65,16 +65,13 @@ export default function MerchantReservationsPage() {
                 ) : (
                   <div className="space-y-3">
                     {filtered.map((r) => (
-                      <div key={r.id} className="border border-border rounded-lg p-4 space-y-3 bg-card">
+                      <div key={r.reservationId} className="border border-border rounded-lg p-4 space-y-3 bg-card">
                         <div className="flex items-start justify-between gap-2">
                           <div>
                             <p className="font-medium text-sm">{r.productTitle}</p>
                             <p className="text-xs text-muted-foreground mt-0.5">
-                              {formatDateTime(r.visitAt)} · {r.quantity}개
+                              {r.visitScheduledAt ? formatDateTime(r.visitScheduledAt) : '미정'} · {r.quantity}개
                             </p>
-                            {r.memo && (
-                              <p className="text-xs text-muted-foreground mt-0.5">메모: {r.memo}</p>
-                            )}
                           </div>
                         </div>
                         {r.status === 'PENDING' && (
@@ -82,7 +79,7 @@ export default function MerchantReservationsPage() {
                             <Button
                               size="sm"
                               className="flex-1 bg-primary hover:bg-primary/90"
-                              onClick={() => handleConfirm(r.id)}
+                              onClick={() => handleConfirm(r.reservationId)}
                             >
                               확정
                             </Button>

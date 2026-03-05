@@ -43,7 +43,7 @@ export default function ReservePage({ params }: { params: { id: string } }) {
     try {
       await createReservation({
         productId: product.id,
-        visitAt: `${visitDate}T${visitTime}:00`,
+        visitScheduledAt: `${visitDate}T${visitTime}:00`,
         quantity: Number(quantity),
         memo: memo || undefined,
       })

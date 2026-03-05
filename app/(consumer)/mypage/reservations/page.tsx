@@ -32,7 +32,7 @@ export default function ReservationsPage() {
   async function handleCancel(id: number) {
     await cancelReservation(id)
     setItems((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, status: 'CANCELLED' as ReservationStatus } : r)),
+      prev.map((r) => (r.reservationId === id ? { ...r, status: 'CANCELLED' as ReservationStatus } : r)),
     )
   }
 
@@ -61,22 +61,21 @@ export default function ReservationsPage() {
                 ) : (
                   <ul className="divide-y divide-border">
                     {filtered.map((item) => (
-                      <li key={item.id} className="p-4 space-y-2">
+                      <li key={item.reservationId} className="p-4 space-y-2">
                         <div className="flex items-start justify-between gap-2">
                           <p className="font-medium text-sm">{item.productTitle}</p>
                           <StatusBadge status={item.status} />
                         </div>
                         <div className="text-xs text-muted-foreground space-y-0.5">
-                          <p>방문일시: {formatDateTime(item.visitAt)}</p>
+                          <p>방문일시: {item.visitScheduledAt ? formatDateTime(item.visitScheduledAt) : '미정'}</p>
                           <p>수량: {item.quantity}개</p>
-                          {item.memo && <p>메모: {item.memo}</p>}
                         </div>
                         {item.status === 'PENDING' && (
                           <Button
                             variant="outline"
                             size="sm"
                             className="text-destructive border-destructive hover:bg-destructive/5"
-                            onClick={() => handleCancel(item.id)}
+                            onClick={() => handleCancel(item.reservationId)}
                           >
                             예약 취소
                           </Button>

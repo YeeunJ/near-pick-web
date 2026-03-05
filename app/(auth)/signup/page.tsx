@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { signup } from '@/lib/api/auth'
+import { signupConsumer, signupMerchant } from '@/lib/api/auth'
 import type { UserRole } from '@/types/api'
 
 export default function SignupPage() {
@@ -17,8 +17,11 @@ export default function SignupPage() {
   const [role, setRole] = useState<UserRole>('CONSUMER')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [shopName, setShopName] = useState('')
+  const [businessName, setBusinessName] = useState('')
   const [businessRegNo, setBusinessRegNo] = useState('')
+  const [shopAddress, setShopAddress] = useState('')
+  const [shopLat, setShopLat] = useState('')
+  const [shopLng, setShopLng] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -27,12 +30,19 @@ export default function SignupPage() {
     setError(null)
     setLoading(true)
     try {
-      await signup({
-        email,
-        password,
-        role,
-        ...(role === 'MERCHANT' && { shopName, businessRegNo }),
-      })
+      if (role === 'MERCHANT') {
+        await signupMerchant({
+          email,
+          password,
+          businessName,
+          businessRegNo,
+          shopAddress,
+          shopLat: Number(shopLat),
+          shopLng: Number(shopLng),
+        })
+      } else {
+        await signupConsumer({ email, password })
+      }
       router.push('/login')
     } catch {
       setError('회원가입에 실패했습니다. 입력 정보를 확인해주세요.')
@@ -102,12 +112,12 @@ export default function SignupPage() {
                 가게 정보
               </p>
               <div className="space-y-2">
-                <Label htmlFor="shopName">가게명</Label>
+                <Label htmlFor="businessName">가게명</Label>
                 <Input
-                  id="shopName"
+                  id="businessName"
                   placeholder="역삼 커피랩"
-                  value={shopName}
-                  onChange={(e) => setShopName(e.target.value)}
+                  value={businessName}
+                  onChange={(e) => setBusinessName(e.target.value)}
                   required
                 />
               </div>
@@ -120,6 +130,42 @@ export default function SignupPage() {
                   onChange={(e) => setBusinessRegNo(e.target.value)}
                   required
                 />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="shopAddress">가게 주소</Label>
+                <Input
+                  id="shopAddress"
+                  placeholder="서울시 강남구 역삼동 123"
+                  value={shopAddress}
+                  onChange={(e) => setShopAddress(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-2">
+                  <Label htmlFor="shopLat">위도 (Lat)</Label>
+                  <Input
+                    id="shopLat"
+                    type="number"
+                    step="any"
+                    placeholder="37.5"
+                    value={shopLat}
+                    onChange={(e) => setShopLat(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="shopLng">경도 (Lng)</Label>
+                  <Input
+                    id="shopLng"
+                    type="number"
+                    step="any"
+                    placeholder="127.0"
+                    value={shopLng}
+                    onChange={(e) => setShopLng(e.target.value)}
+                    required
+                  />
+                </div>
               </div>
             </>
           )}
