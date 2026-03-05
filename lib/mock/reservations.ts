@@ -9,6 +9,7 @@ export const mockReservations: ReservationItem[] = [
     visitScheduledAt: '2026-03-01T14:00:00',
     reservedAt: '2026-02-28T10:00:00',
     status: 'PENDING',
+    memo: '아이스로 부탁드려요',
   },
   {
     reservationId: 2,
@@ -18,6 +19,7 @@ export const mockReservations: ReservationItem[] = [
     visitScheduledAt: '2026-03-02T12:30:00',
     reservedAt: '2026-02-28T11:00:00',
     status: 'CONFIRMED',
+    memo: null,
   },
   {
     reservationId: 3,
@@ -27,6 +29,7 @@ export const mockReservations: ReservationItem[] = [
     visitScheduledAt: '2026-02-20T13:00:00',
     reservedAt: '2026-02-19T09:00:00',
     status: 'CANCELLED',
+    memo: null,
   },
 ]
 
@@ -56,6 +59,8 @@ export const mockWishlists: WishlistItem[] = [
     productTitle: '수제 버거 세트',
     productPrice: 12000,
     productType: 'GENERAL',
+    productStatus: 'ACTIVE',
+    shopAddress: '서울 강남구 논현동 78',
     createdAt: '2026-02-20T10:00:00',
   },
   {
@@ -64,6 +69,8 @@ export const mockWishlists: WishlistItem[] = [
     productTitle: '오늘의 런치 특선',
     productPrice: 9500,
     productType: 'GENERAL',
+    productStatus: 'ACTIVE',
+    shopAddress: '서울 강남구 역삼동 56',
     createdAt: '2026-02-21T11:00:00',
   },
 ]
