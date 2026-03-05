@@ -1,21 +1,24 @@
 'use client'
 
+import { useState } from 'react'
 import { MapPin, ChevronDown, Bell } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
+import { LocationPicker } from '@/components/features/LocationPicker'
+import { useLocationStore } from '@/lib/store/locationStore'
 
 interface ConsumerHeaderProps {
-  location?: string
   showBack?: boolean
   title?: string
 }
 
 export function ConsumerHeader({
-  location = '강남구 역삼동',
   showBack = false,
   title,
 }: ConsumerHeaderProps) {
   const router = useRouter()
+  const { location } = useLocationStore()
+  const [pickerOpen, setPickerOpen] = useState(false)
 
   if (showBack && title) {
     return (
@@ -34,15 +37,21 @@ export function ConsumerHeader({
   }
 
   return (
-    <header className="sticky top-0 z-10 bg-card border-b border-border flex items-center justify-between h-14 px-4">
-      <button className="flex items-center gap-1 text-sm font-semibold">
-        <MapPin className="w-4 h-4 text-primary" />
-        <span>{location}</span>
-        <ChevronDown className="w-4 h-4 text-muted-foreground" />
-      </button>
-      <Button variant="ghost" size="icon">
-        <Bell className="w-5 h-5" />
-      </Button>
-    </header>
+    <>
+      <header className="sticky top-0 z-10 bg-card border-b border-border flex items-center justify-between h-14 px-4">
+        <button
+          className="flex items-center gap-1 text-sm font-semibold"
+          onClick={() => setPickerOpen(true)}
+        >
+          <MapPin className="w-4 h-4 text-primary" />
+          <span>{location.displayName}</span>
+          <ChevronDown className="w-4 h-4 text-muted-foreground" />
+        </button>
+        <Button variant="ghost" size="icon">
+          <Bell className="w-5 h-5" />
+        </Button>
+      </header>
+      <LocationPicker open={pickerOpen} onOpenChange={setPickerOpen} />
+    </>
   )
 }
