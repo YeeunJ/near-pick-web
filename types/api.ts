@@ -5,6 +5,7 @@ export type ProductType = 'GENERAL' | 'FLASH_SALE'
 export type ProductStatus = 'ACTIVE' | 'CLOSED' | 'FORCE_CLOSED'
 export type ReservationStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED'
 export type FlashPurchaseStatus = 'COMPLETED' | 'CANCELLED'
+export type SortType = 'POPULARITY' | 'DISTANCE'
 
 // ─── Auth ────────────────────────────────────────
 export interface LoginResult {
@@ -29,6 +30,9 @@ export interface ProductSummaryResponse {
   popularityScore: number
   distanceKm: number
   merchantName: string
+  shopAddress: string | null
+  shopLat: number
+  shopLng: number
 }
 
 export interface ProductListItem {
@@ -67,6 +71,8 @@ export interface WishlistItem {
   productTitle: string
   productPrice: number
   productType: ProductType
+  productStatus: ProductStatus
+  shopAddress: string | null
   createdAt: string
 }
 
@@ -76,9 +82,10 @@ export interface ReservationItem {
   productId: number
   productTitle: string
   quantity: number
+  status: ReservationStatus
+  memo: string | null
   visitScheduledAt: string | null
   reservedAt: string
-  status: ReservationStatus
 }
 
 export interface ReservationStatusResponse {
@@ -104,6 +111,7 @@ export interface MerchantDashboardResponse {
   thisMonthReservationCount: number
   thisMonthPurchaseCount: number
   products: ProductListItem[]
+  recentReservations: ReservationItem[]
 }
 
 export interface MerchantProfileResponse {
@@ -130,6 +138,7 @@ export interface UserSummary {
 export interface AdminProductItem {
   productId: number
   title: string
+  price: number
   merchantId: number
   merchantName: string
   status: ProductStatus
@@ -191,5 +200,6 @@ export interface CreateProductRequest {
   price: number
   productType: ProductType
   stock?: number
+  availableFrom?: string
   availableUntil?: string
 }

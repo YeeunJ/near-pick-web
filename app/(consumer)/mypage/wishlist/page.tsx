@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Heart, Trash2 } from 'lucide-react'
+import { Heart, MapPin, Trash2 } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { StatusBadge } from '@/components/features/StatusBadge'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -58,11 +59,18 @@ export default function WishlistPage() {
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-sm line-clamp-1">{item.productTitle}</p>
                 <p className="text-primary font-bold text-sm mt-0.5">{formatPrice(item.productPrice)}</p>
+                {item.shopAddress && (
+                  <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
+                    <MapPin className="w-3 h-3" />
+                    <span className="truncate">{item.shopAddress}</span>
+                  </div>
+                )}
               </div>
               <div className="flex flex-col items-end gap-1 shrink-0">
                 {item.productType === 'FLASH_SALE' && (
                   <Badge variant="destructive" className="text-xs px-1.5 py-0.5">FLASH</Badge>
                 )}
+                <StatusBadge status={item.productStatus} />
                 <Button
                   variant="ghost"
                   size="icon"

@@ -72,6 +72,9 @@ export default function MerchantReservationsPage() {
                             <p className="text-xs text-muted-foreground mt-0.5">
                               {r.visitScheduledAt ? formatDateTime(r.visitScheduledAt) : '미정'} · {r.quantity}개
                             </p>
+                            {r.memo && (
+                              <p className="text-xs text-muted-foreground mt-0.5">요청: {r.memo}</p>
+                            )}
                           </div>
                         </div>
                         {r.status === 'PENDING' && (

@@ -7,8 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { StatusBadge } from '@/components/features/StatusBadge'
-import { getMerchantDashboard } from '@/lib/api/merchant'
-import { formatPrice } from '@/lib/utils'
+import { getMerchantDashboard, confirmReservation } from '@/lib/api/merchant'
+import { formatDateTime, formatPrice } from '@/lib/utils'
 import type { MerchantDashboardResponse } from '@/types/api'
 
 export default function MerchantDashboardPage() {
@@ -20,6 +20,19 @@ export default function MerchantDashboardPage() {
       .then(setDash)
       .finally(() => setLoading(false))
   }, [])
+
+  async function handleConfirm(reservationId: number) {
+    const result = await confirmReservation(reservationId)
+    setDash((prev) => {
+      if (!prev) return prev
+      return {
+        ...prev,
+        recentReservations: prev.recentReservations.map((r) =>
+          r.reservationId === reservationId ? { ...r, status: result.status } : r,
+        ),
+      }
+    })
+  }
 
   if (loading) {
     return (
@@ -65,6 +78,41 @@ export default function MerchantDashboardPage() {
           </Card>
         ))}
       </div>
+
+      {dash.recentReservations.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">대기 중인 예약</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {dash.recentReservations.map((r) => (
+              <div key={r.reservationId} className="flex items-center justify-between gap-2">
+                <div>
+                  <p className="text-sm font-medium">{r.productTitle}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {r.visitScheduledAt ? formatDateTime(r.visitScheduledAt) : '미정'} · {r.quantity}개
+                  </p>
+                  {r.memo && (
+                    <p className="text-xs text-muted-foreground mt-0.5">요청: {r.memo}</p>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <StatusBadge status={r.status} />
+                  {r.status === 'PENDING' && (
+                    <Button
+                      size="sm"
+                      className="bg-primary hover:bg-primary/90 h-7 text-xs"
+                      onClick={() => handleConfirm(r.reservationId)}
+                    >
+                      확정
+                    </Button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">

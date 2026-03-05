@@ -10,6 +10,9 @@ export const mockProducts: ProductSummaryResponse[] = [
     popularityScore: 127,
     distanceKm: 0.3,
     merchantName: '역삼 커피랩',
+    shopAddress: '서울 강남구 역삼동 123',
+    shopLat: 37.5000,
+    shopLng: 127.0360,
   },
   {
     id: 2,
@@ -20,6 +23,9 @@ export const mockProducts: ProductSummaryResponse[] = [
     popularityScore: 89,
     distanceKm: 0.7,
     merchantName: '삼성 베이커리',
+    shopAddress: '서울 강남구 삼성동 45',
+    shopLat: 37.5080,
+    shopLng: 127.0620,
   },
   {
     id: 3,
@@ -30,6 +36,9 @@ export const mockProducts: ProductSummaryResponse[] = [
     popularityScore: 64,
     distanceKm: 1.2,
     merchantName: '논현 버거집',
+    shopAddress: '서울 강남구 논현동 78',
+    shopLat: 37.5130,
+    shopLng: 127.0290,
   },
   {
     id: 4,
@@ -40,6 +49,9 @@ export const mockProducts: ProductSummaryResponse[] = [
     popularityScore: 45,
     distanceKm: 1.8,
     merchantName: '청담 마카롱',
+    shopAddress: '서울 강남구 청담동 12',
+    shopLat: 37.5270,
+    shopLng: 127.0510,
   },
   {
     id: 5,
@@ -50,6 +62,9 @@ export const mockProducts: ProductSummaryResponse[] = [
     popularityScore: 38,
     distanceKm: 0.5,
     merchantName: '역삼 런치',
+    shopAddress: '서울 강남구 역삼동 56',
+    shopLat: 37.5010,
+    shopLng: 127.0380,
   },
 ]
 

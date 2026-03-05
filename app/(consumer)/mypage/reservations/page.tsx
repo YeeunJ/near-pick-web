@@ -69,6 +69,7 @@ export default function ReservationsPage() {
                         <div className="text-xs text-muted-foreground space-y-0.5">
                           <p>방문일시: {item.visitScheduledAt ? formatDateTime(item.visitScheduledAt) : '미정'}</p>
                           <p>수량: {item.quantity}개</p>
+                          {item.memo && <p>요청사항: {item.memo}</p>}
                         </div>
                         {item.status === 'PENDING' && (
                           <Button

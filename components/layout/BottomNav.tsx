@@ -6,20 +6,25 @@ import { Home, Heart, Calendar, User } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
-  { href: '/',                    icon: Home,     label: '홈' },
-  { href: '/mypage/wishlist',     icon: Heart,    label: '찜' },
-  { href: '/mypage/reservations', icon: Calendar, label: '예약' },
-  { href: '/mypage/purchases',    icon: User,     label: '마이' },
+  { href: '/',                    icon: Home,     label: '홈',  exact: true },
+  { href: '/mypage/wishlist',     icon: Heart,    label: '찜',  exact: false },
+  { href: '/mypage/reservations', icon: Calendar, label: '예약', exact: false },
+  { href: '/mypage',              icon: User,     label: '마이', exact: true },
 ]
 
 export function BottomNav() {
   const pathname = usePathname()
 
+  function isActive(href: string, exact: boolean) {
+    if (exact) return pathname === href
+    return pathname.startsWith(href)
+  }
+
   return (
     <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] bg-card border-t border-border z-10">
       <ul className="flex">
-        {NAV_ITEMS.map(({ href, icon: Icon, label }) => {
-          const active = pathname === href
+        {NAV_ITEMS.map(({ href, icon: Icon, label, exact }) => {
+          const active = isActive(href, exact)
           return (
             <li key={href} className="flex-1">
               <Link

@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { StatusBadge } from '@/components/features/StatusBadge'
 import { getAdminProducts, forceCloseProduct } from '@/lib/api/admin'
-import { formatDateTime } from '@/lib/utils'
+import { formatDateTime, formatPrice } from '@/lib/utils'
 import type { AdminProductItem, ProductStatus } from '@/types/api'
 
 const TABS: { value: ProductStatus | 'ALL'; label: string }[] = [
@@ -58,6 +58,7 @@ export default function AdminProductsPage() {
                       <TableRow>
                         <TableHead>상품명</TableHead>
                         <TableHead>소상공인</TableHead>
+                        <TableHead>가격</TableHead>
                         <TableHead>상태</TableHead>
                         <TableHead>등록일</TableHead>
                         <TableHead className="text-right">관리</TableHead>
@@ -68,6 +69,7 @@ export default function AdminProductsPage() {
                         <TableRow key={product.productId}>
                           <TableCell className="font-medium text-sm">{product.title}</TableCell>
                           <TableCell className="text-sm text-muted-foreground">{product.merchantName}</TableCell>
+                          <TableCell className="text-sm text-muted-foreground">{formatPrice(product.price)}</TableCell>
                           <TableCell>
                             <StatusBadge status={product.status} />
                           </TableCell>

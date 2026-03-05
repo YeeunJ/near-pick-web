@@ -68,4 +68,16 @@ export const mockDashboard: MerchantDashboardResponse = {
   thisMonthPurchaseCount: 5,
   totalPopularityScore: 127,
   products: mockProductListItems,
+  recentReservations: [
+    {
+      reservationId: 1,
+      productId: 1,
+      productTitle: '아메리카노 (당일 할인)',
+      quantity: 2,
+      visitScheduledAt: '2026-03-01T14:00:00',
+      reservedAt: '2026-02-28T10:00:00',
+      status: 'PENDING',
+      memo: '아이스로 부탁드려요',
+    },
+  ],
 }

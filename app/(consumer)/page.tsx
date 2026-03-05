@@ -9,8 +9,8 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Skeleton } from '@/components/ui/skeleton'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { getNearbyProducts } from '@/lib/api/products'
-import { useGeolocation } from '@/lib/hooks/useGeolocation'
-import type { ProductSummaryResponse } from '@/types/api'
+import { useLocationStore } from '@/lib/store/locationStore'
+import type { ProductSummaryResponse, SortType } from '@/types/api'
 import { MapPin } from 'lucide-react'
 
 const RADIUS_OPTIONS = [
@@ -21,21 +21,21 @@ const RADIUS_OPTIONS = [
 ]
 
 export default function ConsumerHomePage() {
-  const { lat, lng, loading: geoLoading } = useGeolocation()
+  const { location } = useLocationStore()
   const [radius, setRadius] = useState(1)
+  const [sort, setSort] = useState<SortType>('POPULARITY')
   const [products, setProducts] = useState<ProductSummaryResponse[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (geoLoading) return
     setLoading(true)
     setError(null)
-    getNearbyProducts(lat, lng, radius)
+    getNearbyProducts(location.lat, location.lng, radius, sort)
       .then(setProducts)
       .catch(() => setError('상품을 불러오지 못했습니다.'))
       .finally(() => setLoading(false))
-  }, [lat, lng, radius, geoLoading])
+  }, [location.lat, location.lng, radius, sort])
 
   return (
     <>
@@ -57,10 +57,14 @@ export default function ConsumerHomePage() {
               ))}
             </SelectContent>
           </Select>
-          <Tabs defaultValue="popular" className="flex-1">
+          <Tabs
+            value={sort}
+            onValueChange={(v) => setSort(v as SortType)}
+            className="flex-1"
+          >
             <TabsList className="h-9 w-full">
-              <TabsTrigger value="popular" className="flex-1 text-sm">인기순</TabsTrigger>
-              <TabsTrigger value="distance" className="flex-1 text-sm">거리순</TabsTrigger>
+              <TabsTrigger value="POPULARITY" className="flex-1 text-sm">인기순</TabsTrigger>
+              <TabsTrigger value="DISTANCE" className="flex-1 text-sm">거리순</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
