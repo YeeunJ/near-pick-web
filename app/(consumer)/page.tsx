@@ -9,6 +9,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Skeleton } from '@/components/ui/skeleton'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { getNearbyProducts } from '@/lib/api/products'
+import { getWishlist } from '@/lib/api/wishlist'
 import { useLocationStore } from '@/lib/store/locationStore'
 import type { ProductSummaryResponse, SortType } from '@/types/api'
 import { MapPin } from 'lucide-react'
@@ -25,17 +26,33 @@ export default function ConsumerHomePage() {
   const [radius, setRadius] = useState(1)
   const [sort, setSort] = useState<SortType>('POPULARITY')
   const [products, setProducts] = useState<ProductSummaryResponse[]>([])
+  const [wishlistedIds, setWishlistedIds] = useState<Set<number>>(new Set())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     setLoading(true)
     setError(null)
-    getNearbyProducts(location.lat, location.lng, radius, sort)
-      .then(setProducts)
+    Promise.all([
+      getNearbyProducts(location.lat, location.lng, radius, sort),
+      getWishlist().catch(() => []),
+    ])
+      .then(([prods, wishlist]) => {
+        setProducts(prods)
+        setWishlistedIds(new Set(wishlist.map((w) => w.productId)))
+      })
       .catch(() => setError('상품을 불러오지 못했습니다.'))
       .finally(() => setLoading(false))
   }, [location.lat, location.lng, radius, sort])
+
+  function handleWishlistChange(productId: number, wishlisted: boolean) {
+    setWishlistedIds((prev) => {
+      const next = new Set(prev)
+      if (wishlisted) next.add(productId)
+      else next.delete(productId)
+      return next
+    })
+  }
 
   return (
     <>
@@ -83,7 +100,12 @@ export default function ConsumerHomePage() {
           <>
             <div className="grid grid-cols-2 gap-3">
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  isWishlisted={wishlistedIds.has(product.id)}
+                  onWishlistChange={handleWishlistChange}
+                />
               ))}
             </div>
             <Button variant="outline" className="w-full">더 보기</Button>

@@ -11,7 +11,7 @@ import { PageHeader } from '@/components/layout/PageHeader'
 import { StatusBadge } from '@/components/features/StatusBadge'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { getProductDetail } from '@/lib/api/products'
-import { addWishlist, removeWishlist } from '@/lib/api/wishlist'
+import { addWishlist, getWishlist, removeWishlist } from '@/lib/api/wishlist'
 import { formatPrice } from '@/lib/utils'
 import type { ProductDetailResponse } from '@/types/api'
 
@@ -24,8 +24,14 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   const [wishlistLoading, setWishlistLoading] = useState(false)
 
   useEffect(() => {
-    getProductDetail(Number(id))
-      .then(setProduct)
+    Promise.all([
+      getProductDetail(Number(id)),
+      getWishlist().catch(() => []),
+    ])
+      .then(([prod, wishlist]) => {
+        setProduct(prod)
+        setWishlisted(wishlist.some((w) => w.productId === prod.id))
+      })
       .catch(() => setError('상품 정보를 불러오지 못했습니다.'))
       .finally(() => setLoading(false))
   }, [id])
@@ -131,12 +137,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
         <div className="space-y-2 pt-2">
           <div className="flex gap-2">
             <Button
-              variant="outline"
-              className="flex-1 gap-2"
+              variant={wishlisted ? 'default' : 'outline'}
+              className={`flex-1 gap-2 ${wishlisted ? 'bg-red-500 hover:bg-red-600 text-white border-red-500' : ''}`}
               onClick={handleWishlist}
               disabled={wishlistLoading}
             >
-              <Heart className={`w-4 h-4 ${wishlisted ? 'fill-red-500 text-red-500' : ''}`} />
+              <Heart className={`w-4 h-4 ${wishlisted ? 'fill-white' : ''}`} />
               {wishlisted ? '찜 해제' : '찜하기'}
             </Button>
             {product.productType === 'RESERVATION' && (
