@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { MapPin, Heart, Calendar, Zap, ShoppingBag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -15,7 +15,8 @@ import { addWishlist, removeWishlist } from '@/lib/api/wishlist'
 import { formatPrice } from '@/lib/utils'
 import type { ProductDetailResponse } from '@/types/api'
 
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
+export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
   const [product, setProduct] = useState<ProductDetailResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -23,11 +24,11 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const [wishlistLoading, setWishlistLoading] = useState(false)
 
   useEffect(() => {
-    getProductDetail(Number(params.id))
+    getProductDetail(Number(id))
       .then(setProduct)
       .catch(() => setError('상품 정보를 불러오지 못했습니다.'))
       .finally(() => setLoading(false))
-  }, [params.id])
+  }, [id])
 
   async function handleWishlist() {
     if (!product || wishlistLoading) return

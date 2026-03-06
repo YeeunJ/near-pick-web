@@ -9,7 +9,7 @@ function matchesPath(pathname: string, paths: string[]): boolean {
   return paths.some((p) => pathname === p || pathname.startsWith(`${p}/`))
 }
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const token = request.cookies.get('token')?.value
   const role = request.cookies.get('role')?.value

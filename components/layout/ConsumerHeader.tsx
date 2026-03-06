@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MapPin, ChevronDown, Bell } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
@@ -19,6 +19,8 @@ export function ConsumerHeader({
   const router = useRouter()
   const { location } = useLocationStore()
   const [pickerOpen, setPickerOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   if (showBack && title) {
     return (
@@ -44,7 +46,7 @@ export function ConsumerHeader({
           onClick={() => setPickerOpen(true)}
         >
           <MapPin className="w-4 h-4 text-primary" />
-          <span>{location.displayName}</span>
+          <span>{mounted ? location.displayName : '위치 설정'}</span>
           <ChevronDown className="w-4 h-4 text-muted-foreground" />
         </button>
         <Button variant="ghost" size="icon">
