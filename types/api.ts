@@ -1,7 +1,7 @@
 // ─── 공통 ────────────────────────────────────────
 export type UserRole = 'CONSUMER' | 'MERCHANT' | 'ADMIN'
 export type UserStatus = 'ACTIVE' | 'SUSPENDED' | 'WITHDRAWN'
-export type ProductType = 'GENERAL' | 'FLASH_SALE'
+export type ProductType = 'RESERVATION' | 'FLASH_SALE'
 export type ProductStatus = 'ACTIVE' | 'CLOSED' | 'FORCE_CLOSED'
 export type ReservationStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED'
 export type FlashPurchaseStatus = 'COMPLETED' | 'CANCELLED'

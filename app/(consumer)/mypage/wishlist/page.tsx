@@ -68,7 +68,10 @@ export default function WishlistPage() {
               </div>
               <div className="flex flex-col items-end gap-1 shrink-0">
                 {item.productType === 'FLASH_SALE' && (
-                  <Badge variant="destructive" className="text-xs px-1.5 py-0.5">FLASH</Badge>
+                  <Badge variant="destructive" className="text-xs px-1.5 py-0.5">선착순</Badge>
+                )}
+                {item.productType === 'RESERVATION' && (
+                  <Badge variant="outline" className="text-xs px-1.5 py-0.5 text-primary border-primary">예약</Badge>
                 )}
                 <StatusBadge status={item.productStatus} />
                 <Button

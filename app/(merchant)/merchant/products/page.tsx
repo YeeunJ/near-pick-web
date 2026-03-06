@@ -61,7 +61,7 @@ export default function MerchantProductsPage() {
                   <TableCell className="font-medium text-sm">{product.title}</TableCell>
                   <TableCell className="text-sm">{formatPrice(product.price)}</TableCell>
                   <TableCell className="text-sm text-muted-foreground">
-                    {product.productType === 'GENERAL' ? '일반' : '선착순'}
+                    {product.productType === 'RESERVATION' ? '예약' : '선착순'}
                   </TableCell>
                   <TableCell><StatusBadge status={product.status} /></TableCell>
                   <TableCell className="text-right">

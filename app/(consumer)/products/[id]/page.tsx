@@ -138,7 +138,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
               <Heart className={`w-4 h-4 ${wishlisted ? 'fill-red-500 text-red-500' : ''}`} />
               {wishlisted ? '찜 해제' : '찜하기'}
             </Button>
-            {product.productType === 'GENERAL' && (
+            {product.productType === 'RESERVATION' && (
               <Button variant="outline" className="flex-1 gap-2" asChild>
                 <Link href={`/products/${product.id}/reserve`}>
                   <Calendar className="w-4 h-4" />
