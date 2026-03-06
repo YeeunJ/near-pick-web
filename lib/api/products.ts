@@ -1,4 +1,4 @@
-import { api } from './client'
+import { api, extractList } from './client'
 import type { PageResponse, ProductDetailResponse, ProductSummaryResponse, SortType } from '@/types/api'
 
 export function getNearbyProducts(
@@ -11,7 +11,7 @@ export function getNearbyProducts(
     .get<PageResponse<ProductSummaryResponse>>(
       `/products/nearby?lat=${lat}&lng=${lng}&radius=${radius}&sort=${sort}`,
     )
-    .then((r) => r.content)
+    .then(extractList)
 }
 
 export function getProductDetail(id: number): Promise<ProductDetailResponse> {

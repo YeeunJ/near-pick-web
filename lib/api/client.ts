@@ -67,6 +67,12 @@ async function apiRequest<T>(
   return json.data
 }
 
+/** 백엔드가 배열 또는 PageResponse 어느 형태로 오더라도 배열로 추출 */
+export function extractList<T>(r: T[] | { content: T[] }): T[] {
+  if (Array.isArray(r)) return r
+  return r?.content ?? []
+}
+
 export const api = {
   get<T>(path: string): Promise<T> {
     return apiRequest<T>(path, { method: 'GET' })
