@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Button } from '@/components/ui/button'
@@ -16,7 +16,8 @@ import { createFlashPurchase } from '@/lib/api/flashPurchases'
 import { formatPrice } from '@/lib/utils'
 import type { ProductDetailResponse } from '@/types/api'
 
-export default function PurchasePage({ params }: { params: { id: string } }) {
+export default function PurchasePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
   const router = useRouter()
   const [product, setProduct] = useState<ProductDetailResponse | null>(null)
   const [loading, setLoading] = useState(true)
@@ -25,10 +26,10 @@ export default function PurchasePage({ params }: { params: { id: string } }) {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    getProductDetail(Number(params.id))
+    getProductDetail(Number(id))
       .then(setProduct)
       .finally(() => setLoading(false))
-  }, [params.id])
+  }, [id])
 
   async function handlePurchase() {
     if (!product) return

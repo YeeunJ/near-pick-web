@@ -1,4 +1,4 @@
-import { api } from './client'
+import { api, extractList } from './client'
 import type { CreateFlashPurchaseRequest, FlashPurchaseItem, PageResponse } from '@/types/api'
 
 export function createFlashPurchase(body: CreateFlashPurchaseRequest): Promise<FlashPurchaseItem> {
@@ -6,5 +6,5 @@ export function createFlashPurchase(body: CreateFlashPurchaseRequest): Promise<F
 }
 
 export function getFlashPurchases(): Promise<FlashPurchaseItem[]> {
-  return api.get<PageResponse<FlashPurchaseItem>>('/flash-purchases/me').then((r) => r.content)
+  return api.get<PageResponse<FlashPurchaseItem> | FlashPurchaseItem[]>('/flash-purchases/me').then(extractList)
 }

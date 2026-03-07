@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { MapPin, Heart, Calendar, Zap, ShoppingBag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -11,11 +11,12 @@ import { PageHeader } from '@/components/layout/PageHeader'
 import { StatusBadge } from '@/components/features/StatusBadge'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { getProductDetail } from '@/lib/api/products'
-import { addWishlist, removeWishlist } from '@/lib/api/wishlist'
+import { addWishlist, getWishlist, removeWishlist } from '@/lib/api/wishlist'
 import { formatPrice } from '@/lib/utils'
 import type { ProductDetailResponse } from '@/types/api'
 
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
+export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
   const [product, setProduct] = useState<ProductDetailResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -23,11 +24,17 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const [wishlistLoading, setWishlistLoading] = useState(false)
 
   useEffect(() => {
-    getProductDetail(Number(params.id))
-      .then(setProduct)
+    Promise.all([
+      getProductDetail(Number(id)),
+      getWishlist().catch(() => []),
+    ])
+      .then(([prod, wishlist]) => {
+        setProduct(prod)
+        setWishlisted(wishlist.some((w) => w.productId === prod.id))
+      })
       .catch(() => setError('상품 정보를 불러오지 못했습니다.'))
       .finally(() => setLoading(false))
-  }, [params.id])
+  }, [id])
 
   async function handleWishlist() {
     if (!product || wishlistLoading) return
@@ -130,15 +137,15 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
         <div className="space-y-2 pt-2">
           <div className="flex gap-2">
             <Button
-              variant="outline"
-              className="flex-1 gap-2"
+              variant={wishlisted ? 'default' : 'outline'}
+              className={`flex-1 gap-2 ${wishlisted ? 'bg-red-500 hover:bg-red-600 text-white border-red-500' : ''}`}
               onClick={handleWishlist}
               disabled={wishlistLoading}
             >
-              <Heart className={`w-4 h-4 ${wishlisted ? 'fill-red-500 text-red-500' : ''}`} />
+              <Heart className={`w-4 h-4 ${wishlisted ? 'fill-white' : ''}`} />
               {wishlisted ? '찜 해제' : '찜하기'}
             </Button>
-            {product.productType === 'GENERAL' && (
+            {product.productType === 'RESERVATION' && (
               <Button variant="outline" className="flex-1 gap-2" asChild>
                 <Link href={`/products/${product.id}/reserve`}>
                   <Calendar className="w-4 h-4" />

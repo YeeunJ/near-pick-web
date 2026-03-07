@@ -1,4 +1,4 @@
-import { api } from './client'
+import { api, extractList } from './client'
 import type {
   CreateProductRequest,
   MerchantDashboardResponse,
@@ -13,7 +13,7 @@ export function getMerchantDashboard(): Promise<MerchantDashboardResponse> {
 }
 
 export function getMerchantProducts(): Promise<ProductListItem[]> {
-  return api.get<PageResponse<ProductListItem>>('/products/me').then((r) => r.content)
+  return api.get<PageResponse<ProductListItem> | ProductListItem[]>('/products/me').then(extractList)
 }
 
 export function createProduct(body: CreateProductRequest): Promise<void> {
@@ -25,7 +25,7 @@ export function closeProduct(id: number): Promise<void> {
 }
 
 export function getMerchantReservations(): Promise<ReservationItem[]> {
-  return api.get<PageResponse<ReservationItem>>('/reservations/merchant').then((r) => r.content)
+  return api.get<PageResponse<ReservationItem> | ReservationItem[]>('/reservations/merchant').then(extractList)
 }
 
 export function confirmReservation(id: number): Promise<ReservationStatusResponse> {

@@ -1,4 +1,4 @@
-import { api } from './client'
+import { api, extractList } from './client'
 import type { AdminProductItem, PageResponse, ProductStatus, UserRole, UserStatus, UserSummary } from '@/types/api'
 
 export function getAdminUsers(params?: {
@@ -11,7 +11,7 @@ export function getAdminUsers(params?: {
   if (params?.status) qs.set('status', params.status)
   if (params?.query) qs.set('query', params.query)
   const suffix = qs.toString() ? `?${qs.toString()}` : ''
-  return api.get<PageResponse<UserSummary>>(`/admin/users${suffix}`).then((r) => r.content)
+  return api.get<PageResponse<UserSummary> | UserSummary[]>(`/admin/users${suffix}`).then(extractList)
 }
 
 export function suspendUser(id: number): Promise<void> {
@@ -24,7 +24,7 @@ export function deleteUser(id: number): Promise<void> {
 
 export function getAdminProducts(status?: ProductStatus): Promise<AdminProductItem[]> {
   const suffix = status ? `?status=${status}` : ''
-  return api.get<PageResponse<AdminProductItem>>(`/admin/products${suffix}`).then((r) => r.content)
+  return api.get<PageResponse<AdminProductItem> | AdminProductItem[]>(`/admin/products${suffix}`).then(extractList)
 }
 
 export function forceCloseProduct(id: number): Promise<void> {

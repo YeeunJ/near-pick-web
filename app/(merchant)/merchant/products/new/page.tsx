@@ -11,9 +11,14 @@ import { Separator } from '@/components/ui/separator'
 import { createProduct } from '@/lib/api/merchant'
 import type { ProductType } from '@/types/api'
 
+const PRODUCT_TYPES: { type: ProductType; label: string; description: string }[] = [
+  { type: 'RESERVATION', label: '예약 상품', description: '소비자가 방문 일정을 잡고 예약하는 상품' },
+  { type: 'FLASH_SALE', label: '선착순 구매 상품', description: '수량 한정, 선착순으로 즉시 구매하는 상품' },
+]
+
 export default function NewProductPage() {
   const router = useRouter()
-  const [productType, setProductType] = useState<ProductType>('GENERAL')
+  const [productType, setProductType] = useState<ProductType>('RESERVATION')
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
   const [description, setDescription] = useState('')
@@ -32,10 +37,8 @@ export default function NewProductPage() {
         description,
         price: Number(price),
         productType,
-        ...(productType === 'FLASH_SALE' && {
-          stock: Number(stock),
-          availableUntil: availableUntil ? `${availableUntil}:00` : undefined,
-        }),
+        stock: Number(stock),
+        availableUntil: availableUntil ? `${availableUntil}:00` : undefined,
       })
       router.push('/merchant/products')
     } catch {
@@ -52,29 +55,34 @@ export default function NewProductPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card>
           <CardHeader>
+            <CardTitle className="text-base">상품 유형</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {PRODUCT_TYPES.map(({ type, label, description: desc }) => (
+              <button
+                key={type}
+                type="button"
+                onClick={() => setProductType(type)}
+                className={`w-full text-left px-4 py-3 rounded-lg border transition-colors ${
+                  productType === type
+                    ? 'bg-primary/5 border-primary'
+                    : 'bg-card border-border hover:bg-muted'
+                }`}
+              >
+                <p className={`text-sm font-semibold ${productType === type ? 'text-primary' : 'text-foreground'}`}>
+                  {label}
+                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">{desc}</p>
+              </button>
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
             <CardTitle className="text-base">기본 정보</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>상품 유형</Label>
-              <div className="grid grid-cols-2 gap-2">
-                {(['GENERAL', 'FLASH_SALE'] as const).map((type) => (
-                  <button
-                    key={type}
-                    type="button"
-                    onClick={() => setProductType(type)}
-                    className={`py-2 px-3 rounded-lg border text-sm font-medium transition-colors ${
-                      productType === type
-                        ? 'bg-primary text-primary-foreground border-primary'
-                        : 'bg-card border-border text-foreground hover:bg-muted'
-                    }`}
-                  >
-                    {type === 'GENERAL' ? '일반 상품' : '선착순 상품'}
-                  </button>
-                ))}
-              </div>
-            </div>
-
             <div className="space-y-2">
               <Label htmlFor="title">상품명</Label>
               <Input
@@ -104,43 +112,44 @@ export default function NewProductPage() {
                 rows={4}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                required
               />
             </div>
           </CardContent>
         </Card>
 
-        {productType === 'FLASH_SALE' && (
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">선착순 설정</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="stock">수량</Label>
-                <Input
-                  id="stock"
-                  type="number"
-                  placeholder="10"
-                  min={1}
-                  value={stock}
-                  onChange={(e) => setStock(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="availableUntil">종료 일시</Label>
-                <Input
-                  id="availableUntil"
-                  type="datetime-local"
-                  value={availableUntil}
-                  onChange={(e) => setAvailableUntil(e.target.value)}
-                  required
-                />
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">
+              {productType === 'RESERVATION' ? '예약 설정' : '선착순 설정'}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="stock">수량</Label>
+              <Input
+                id="stock"
+                type="number"
+                placeholder="10"
+                min={1}
+                value={stock}
+                onChange={(e) => setStock(e.target.value)}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="availableUntil">
+                {productType === 'RESERVATION' ? '예약 마감 일시' : '판매 종료 일시'}
+              </Label>
+              <Input
+                id="availableUntil"
+                type="datetime-local"
+                value={availableUntil}
+                onChange={(e) => setAvailableUntil(e.target.value)}
+                required
+              />
+            </div>
+          </CardContent>
+        </Card>
 
         {error && <p className="text-sm text-destructive">{error}</p>}
         <Separator />

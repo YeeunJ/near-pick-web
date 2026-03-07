@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { Users, Package, LogOut, ShieldCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { useAuthStore } from '@/lib/store/authStore'
 
 const NAV_ITEMS = [
   { href: '/admin/users',    icon: Users,   label: '사용자 관리' },
@@ -13,6 +14,7 @@ const NAV_ITEMS = [
 
 export function AdminSidebar() {
   const pathname = usePathname()
+  const { logout } = useAuthStore()
 
   return (
     <aside className="w-56 shrink-0 bg-card border-r border-border flex flex-col min-h-screen">
@@ -44,7 +46,7 @@ export function AdminSidebar() {
         </ul>
       </nav>
       <div className="p-4 border-t border-border">
-        <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-muted-foreground">
+        <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-muted-foreground" onClick={logout}>
           <LogOut className="w-4 h-4" />
           로그아웃
         </Button>

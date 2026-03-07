@@ -1,8 +1,8 @@
-import { api } from './client'
+import { api, extractList } from './client'
 import type { PageResponse, WishlistItem } from '@/types/api'
 
 export function getWishlist(): Promise<WishlistItem[]> {
-  return api.get<PageResponse<WishlistItem>>('/wishlists/me').then((r) => r.content)
+  return api.get<PageResponse<WishlistItem> | WishlistItem[]>('/wishlists/me').then(extractList)
 }
 
 export function addWishlist(productId: number): Promise<void> {

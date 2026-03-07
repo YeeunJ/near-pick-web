@@ -1,4 +1,4 @@
-import { api } from './client'
+import { api, extractList } from './client'
 import type { CreateReservationRequest, PageResponse, ReservationItem } from '@/types/api'
 
 export function createReservation(body: CreateReservationRequest): Promise<ReservationItem> {
@@ -6,7 +6,7 @@ export function createReservation(body: CreateReservationRequest): Promise<Reser
 }
 
 export function getReservations(): Promise<ReservationItem[]> {
-  return api.get<PageResponse<ReservationItem>>('/reservations/me').then((r) => r.content)
+  return api.get<PageResponse<ReservationItem> | ReservationItem[]>('/reservations/me').then(extractList)
 }
 
 export function cancelReservation(id: number): Promise<void> {

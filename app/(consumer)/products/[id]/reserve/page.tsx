@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Button } from '@/components/ui/button'
@@ -18,7 +18,8 @@ import type { ProductDetailResponse } from '@/types/api'
 
 const QUANTITY_OPTIONS = Array.from({ length: 10 }, (_, i) => i + 1)
 
-export default function ReservePage({ params }: { params: { id: string } }) {
+export default function ReservePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
   const router = useRouter()
   const [product, setProduct] = useState<ProductDetailResponse | null>(null)
   const [loading, setLoading] = useState(true)
@@ -30,10 +31,10 @@ export default function ReservePage({ params }: { params: { id: string } }) {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    getProductDetail(Number(params.id))
+    getProductDetail(Number(id))
       .then(setProduct)
       .finally(() => setLoading(false))
-  }, [params.id])
+  }, [id])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
