@@ -6,6 +6,8 @@ export type ProductStatus = 'ACTIVE' | 'CLOSED' | 'FORCE_CLOSED'
 export type ReservationStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED'
 export type FlashPurchaseStatus = 'COMPLETED' | 'CANCELLED'
 export type SortType = 'POPULARITY' | 'DISTANCE'
+export type LocationSource = 'DIRECT' | 'CURRENT' | 'SAVED'
+export type ProductCategory = 'FOOD' | 'BEVERAGE' | 'BEAUTY' | 'DAILY' | 'OTHER'
 
 // ─── Auth ────────────────────────────────────────
 export interface LoginResult {
@@ -18,6 +20,79 @@ export interface SignupResponse {
   userId: number
   email: string
   role: UserRole
+}
+
+// ─── Location (Phase 10) ─────────────────────────
+export interface SavedLocationResponse {
+  id: number
+  label: string
+  lat: number
+  lng: number
+  isDefault: boolean
+  createdAt: string
+}
+
+export interface CreateSavedLocationRequest {
+  label: string
+  lat: number
+  lng: number
+  isDefault?: boolean
+}
+
+export interface UpdateSavedLocationRequest {
+  label?: string
+  isDefault?: boolean
+}
+
+export interface LocationSearchResult {
+  address: string
+  lat: number
+  lng: number
+}
+
+// ─── Product Enhancement (Phase 11) ──────────────
+export interface ProductImageResponse {
+  id: number
+  url: string
+  s3Key: string
+  displayOrder: number
+}
+
+export interface MenuChoiceResponse {
+  id: number
+  name: string
+  additionalPrice: number
+  displayOrder: number
+}
+
+export interface ProductMenuOptionGroupResponse {
+  id: number
+  name: string
+  required: boolean
+  maxSelect: number
+  displayOrder: number
+  choices: MenuChoiceResponse[]
+}
+
+export interface ProductSpecItem {
+  key: string
+  value: string
+}
+
+export interface PresignedUrlRequest {
+  filename: string
+  contentType: string
+}
+
+export interface PresignedUrlResponse {
+  presignedUrl: string
+  s3Key: string
+  expiresInSeconds: number
+}
+
+export interface ProductImageSaveRequest {
+  s3Key: string
+  displayOrder: number
 }
 
 // ─── Product ─────────────────────────────────────
@@ -33,6 +108,8 @@ export interface ProductSummaryResponse {
   shopAddress: string | null
   shopLat: number
   shopLng: number
+  category: ProductCategory | null
+  thumbnailUrl: string | null
 }
 
 export interface ProductListItem {
@@ -62,6 +139,10 @@ export interface ProductDetailResponse {
   wishlistCount: number
   reservationCount: number
   purchaseCount: number
+  category: ProductCategory | null
+  images: ProductImageResponse[]
+  menuOptions: ProductMenuOptionGroupResponse[]
+  specs: ProductSpecItem[] | null
 }
 
 // ─── Wishlist ─────────────────────────────────────
@@ -202,4 +283,6 @@ export interface CreateProductRequest {
   stock?: number
   availableFrom?: string
   availableUntil?: string
+  category?: ProductCategory
+  specs?: ProductSpecItem[]
 }
