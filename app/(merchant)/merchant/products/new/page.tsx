@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { X, ImagePlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -9,37 +10,101 @@ import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { createProduct } from '@/lib/api/merchant'
-import type { ProductType } from '@/types/api'
+import { uploadProductImage } from '@/lib/api/productImages'
+import { cn } from '@/lib/utils'
+import type { ProductCategory, ProductSpecItem, ProductType } from '@/types/api'
 
 const PRODUCT_TYPES: { type: ProductType; label: string; description: string }[] = [
   { type: 'RESERVATION', label: '예약 상품', description: '소비자가 방문 일정을 잡고 예약하는 상품' },
   { type: 'FLASH_SALE', label: '선착순 구매 상품', description: '수량 한정, 선착순으로 즉시 구매하는 상품' },
 ]
 
+const CATEGORIES: { value: ProductCategory; label: string }[] = [
+  { value: 'FOOD', label: '음식' },
+  { value: 'BEVERAGE', label: '음료' },
+  { value: 'BEAUTY', label: '뷰티' },
+  { value: 'DAILY', label: '생활용품' },
+  { value: 'OTHER', label: '기타' },
+]
+
+const SPEC_CATEGORIES: ProductCategory[] = ['BEAUTY', 'DAILY', 'OTHER']
+
 export default function NewProductPage() {
   const router = useRouter()
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
   const [productType, setProductType] = useState<ProductType>('RESERVATION')
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
   const [description, setDescription] = useState('')
   const [stock, setStock] = useState('')
   const [availableUntil, setAvailableUntil] = useState('')
+  const [category, setCategory] = useState<ProductCategory | null>(null)
+  const [specs, setSpecs] = useState<ProductSpecItem[]>([])
+  const [pendingFiles, setPendingFiles] = useState<File[]>([])
+  const [pendingPreviews, setPendingPreviews] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+
+  function addSpec() {
+    setSpecs((prev) => [...prev, { key: '', value: '' }])
+  }
+
+  function updateSpec(index: number, field: 'key' | 'value', val: string) {
+    setSpecs((prev) => prev.map((s, i) => (i === index ? { ...s, [field]: val } : s)))
+  }
+
+  function removeSpec(index: number) {
+    setSpecs((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? [])
+    if (!files.length) return
+
+    const remaining = 5 - pendingFiles.length
+    const toAdd = files.slice(0, remaining)
+
+    setPendingFiles((prev) => [...prev, ...toAdd])
+    toAdd.forEach((file) => {
+      const url = URL.createObjectURL(file)
+      setPendingPreviews((prev) => [...prev, url])
+    })
+
+    // reset input so same file can be re-selected
+    e.target.value = ''
+  }
+
+  function removeFile(index: number) {
+    URL.revokeObjectURL(pendingPreviews[index])
+    setPendingFiles((prev) => prev.filter((_, i) => i !== index))
+    setPendingPreviews((prev) => prev.filter((_, i) => i !== index))
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
     setSubmitting(true)
     try {
-      await createProduct({
+      const result = await createProduct({
         title,
         description,
         price: Number(price),
         productType,
         stock: Number(stock),
         availableUntil: availableUntil ? `${availableUntil}:00` : undefined,
+        category: category ?? undefined,
+        specs: specs.filter((s) => s.key && s.value).length > 0
+          ? specs.filter((s) => s.key && s.value)
+          : undefined,
       })
+
+      if (result?.id && pendingFiles.length > 0) {
+        await Promise.all(
+          pendingFiles.map((file, i) => uploadProductImage(result.id, file, i + 1))
+        )
+      }
+
       router.push('/merchant/products')
     } catch {
       setError('상품 등록에 실패했습니다. 다시 시도해주세요.')
@@ -119,6 +184,71 @@ export default function NewProductPage() {
 
         <Card>
           <CardHeader>
+            <CardTitle className="text-base">카테고리 (선택)</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {CATEGORIES.map(({ value, label }) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setCategory(category === value ? null : value)}
+                  className={cn(
+                    'px-3 py-1.5 rounded-full text-sm border transition-colors',
+                    category === value
+                      ? 'bg-primary text-white border-primary'
+                      : 'bg-card border-border hover:bg-muted',
+                  )}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {category && SPEC_CATEGORIES.includes(category) && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">상품 정보 (스펙)</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {specs.map((spec, i) => (
+                <div key={i} className="flex gap-2">
+                  <Input
+                    placeholder="항목 (예: 용량)"
+                    value={spec.key}
+                    onChange={(e) => updateSpec(i, 'key', e.target.value)}
+                  />
+                  <Input
+                    placeholder="값 (예: 200ml)"
+                    value={spec.value}
+                    onChange={(e) => updateSpec(i, 'value', e.target.value)}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeSpec(i)}
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={addSpec}
+                className="w-full text-sm"
+              >
+                + 항목 추가
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        <Card>
+          <CardHeader>
             <CardTitle className="text-base">
               {productType === 'RESERVATION' ? '예약 설정' : '선착순 설정'}
             </CardTitle>
@@ -148,6 +278,55 @@ export default function NewProductPage() {
                 required
               />
             </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">상품 이미지 (선택, 최대 5장)</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {pendingPreviews.length > 0 && (
+              <div className="grid grid-cols-3 gap-2">
+                {pendingPreviews.map((src, i) => (
+                  <div key={i} className="relative aspect-square">
+                    <img
+                      src={src}
+                      alt=""
+                      className="w-full h-full object-cover rounded-lg border"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeFile(i)}
+                      className="absolute top-1 right-1 w-5 h-5 bg-black/60 rounded-full flex items-center justify-center"
+                    >
+                      <X className="w-3 h-3 text-white" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {pendingFiles.length < 5 && (
+              <>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  multiple
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <ImagePlus className="w-4 h-4 mr-2" />
+                  이미지 추가 ({pendingFiles.length}/5)
+                </Button>
+              </>
+            )}
           </CardContent>
         </Card>
 

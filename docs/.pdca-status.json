@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-03-04T16:07:22.818Z",
+  "lastUpdated": "2026-03-19T00:00:00.000Z",
   "activeFeatures": [
     "phase6-ui-integration",
     "near-pick-web",
@@ -18,7 +18,13 @@
     "dashboard",
     "products",
     "new",
-    "users"
+    "users",
+    "layout",
+    "product",
+    "location",
+    "locations",
+    "mypage",
+    "mock"
   ],
   "primaryFeature": "phase6-ui-integration",
   "features": {
@@ -38,6 +44,14 @@
       "archivedAt": "2026-03-05T00:00:00.000Z",
       "archivedTo": "docs/archive/2026-03/phase6-ui-integration/"
     },
+    "phase9-location-product-ui": {
+      "phase": "archived",
+      "matchRate": 97,
+      "iterationCount": 0,
+      "startedAt": "2026-03-12T00:00:00.000Z",
+      "archivedAt": "2026-03-19T00:00:00.000Z",
+      "archivedTo": "docs/archive/2026-03/phase9-location-product-ui/"
+    },
     "near-pick-web": {
       "phase": "do",
       "phaseNumber": 3,
@@ -47,7 +61,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-04T10:45:19.165Z",
-        "lastUpdated": "2026-03-04T16:07:22.818Z"
+        "lastUpdated": "2026-03-12T07:13:29.269Z"
       },
       "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/app/layout.tsx"
     },
@@ -60,9 +74,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-04T10:45:30.831Z",
-        "lastUpdated": "2026-03-04T10:46:12.885Z"
+        "lastUpdated": "2026-03-12T03:59:00.206Z"
       },
-      "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/lib/api/admin.ts"
+      "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/lib/api/merchant.ts"
     },
     "store": {
       "phase": "do",
@@ -73,9 +87,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-04T10:45:39.293Z",
-        "lastUpdated": "2026-03-04T10:45:39.293Z"
+        "lastUpdated": "2026-03-12T03:54:55.746Z"
       },
-      "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/lib/store/authStore.ts"
+      "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/lib/store/locationStore.ts"
     },
     "login": {
       "phase": "do",
@@ -112,7 +126,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-04T10:47:22.274Z",
-        "lastUpdated": "2026-03-04T10:47:22.274Z"
+        "lastUpdated": "2026-03-12T03:56:40.214Z"
       },
       "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/app/(consumer)/page.tsx"
     },
@@ -125,7 +139,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-04T10:47:43.048Z",
-        "lastUpdated": "2026-03-04T10:47:43.048Z"
+        "lastUpdated": "2026-03-12T03:56:06.280Z"
       },
       "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/app/(consumer)/products/[id]/page.tsx"
     },
@@ -138,7 +152,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-04T10:48:05.829Z",
-        "lastUpdated": "2026-03-04T10:48:05.829Z"
+        "lastUpdated": "2026-03-12T12:19:33.644Z"
       },
       "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/app/(consumer)/products/[id]/reserve/page.tsx"
     },
@@ -151,7 +165,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-04T10:48:23.223Z",
-        "lastUpdated": "2026-03-04T10:48:23.223Z"
+        "lastUpdated": "2026-03-12T12:19:32.151Z"
       },
       "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/app/(consumer)/products/[id]/purchase/page.tsx"
     },
@@ -164,7 +178,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-04T10:48:36.742Z",
-        "lastUpdated": "2026-03-04T10:48:36.742Z"
+        "lastUpdated": "2026-03-06T12:14:44.255Z"
       },
       "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/app/(consumer)/mypage/wishlist/page.tsx"
     },
@@ -216,9 +230,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-04T10:49:35.620Z",
-        "lastUpdated": "2026-03-04T10:52:24.183Z"
+        "lastUpdated": "2026-03-06T12:14:33.713Z"
       },
-      "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/app/(admin)/admin/products/page.tsx"
+      "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/app/(merchant)/merchant/products/page.tsx"
     },
     "new": {
       "phase": "do",
@@ -229,7 +243,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-04T10:49:56.163Z",
-        "lastUpdated": "2026-03-04T10:49:56.163Z"
+        "lastUpdated": "2026-03-12T07:26:11.924Z"
       },
       "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/app/(merchant)/merchant/products/new/page.tsx"
     },
@@ -245,6 +259,84 @@
         "lastUpdated": "2026-03-04T10:50:36.455Z"
       },
       "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/app/(admin)/admin/users/page.tsx"
+    },
+    "layout": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-06T12:13:43.081Z",
+        "lastUpdated": "2026-03-06T18:01:55.625Z"
+      },
+      "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/components/layout/ConsumerHeader.tsx"
+    },
+    "product": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-06T18:17:50.720Z",
+        "lastUpdated": "2026-03-12T03:56:51.234Z"
+      },
+      "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/components/features/product/ImageUploader.tsx"
+    },
+    "location": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-12T03:57:35.662Z",
+        "lastUpdated": "2026-03-12T03:57:55.203Z"
+      },
+      "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/components/features/location/AddLocationModal.tsx"
+    },
+    "locations": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-12T03:58:08.996Z",
+        "lastUpdated": "2026-03-12T03:58:08.996Z"
+      },
+      "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/app/(consumer)/mypage/locations/page.tsx"
+    },
+    "mypage": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-12T03:58:13.129Z",
+        "lastUpdated": "2026-03-12T03:58:18.794Z"
+      },
+      "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/app/(consumer)/mypage/page.tsx"
+    },
+    "mock": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-12T03:59:32.780Z",
+        "lastUpdated": "2026-03-12T03:59:32.780Z"
+      },
+      "lastFile": "/Users/jeong-yeeun/git/ai-project/near-pick-web/lib/mock/products.ts"
     }
   },
   "pipeline": {
@@ -257,7 +349,7 @@
   "session": {
     "startedAt": "2026-03-04T00:00:00.000Z",
     "onboardingCompleted": true,
-    "lastActivity": "2026-03-04T16:07:22.818Z"
+    "lastActivity": "2026-03-12T12:19:33.644Z"
   },
   "history": [
     {
@@ -461,6 +553,450 @@
     {
       "timestamp": "2026-03-04T16:07:22.818Z",
       "feature": "near-pick-web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T12:13:37.826Z",
+      "feature": "near-pick-web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T12:13:43.081Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T12:13:48.112Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T12:13:52.455Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T12:13:58.435Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T12:14:01.888Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T12:14:05.293Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T12:14:24.803Z",
+      "feature": "new",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T12:14:33.713Z",
+      "feature": "products",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T12:14:37.460Z",
+      "feature": "[id]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T12:14:44.255Z",
+      "feature": "wishlist",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:00:55.291Z",
+      "feature": "near-pick-web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:01:12.016Z",
+      "feature": "[id]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:01:15.909Z",
+      "feature": "[id]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:01:22.921Z",
+      "feature": "[id]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:01:26.243Z",
+      "feature": "reserve",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:01:30.259Z",
+      "feature": "reserve",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:01:35.750Z",
+      "feature": "reserve",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:01:38.389Z",
+      "feature": "purchase",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:01:41.353Z",
+      "feature": "purchase",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:01:44.824Z",
+      "feature": "purchase",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:01:48.748Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:01:52.295Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:01:55.625Z",
+      "feature": "layout",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:11:24.478Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:11:30.210Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:11:33.733Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:11:37.351Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:11:42.169Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:11:45.538Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:11:48.392Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:11:52.485Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:11:57.020Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:12:00.685Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:12:04.833Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:12:08.219Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:12:11.651Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:12:15.496Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:17:50.720Z",
+      "feature": "product",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:18:08.830Z",
+      "feature": "(consumer)",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:18:14.490Z",
+      "feature": "[id]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:18:20.163Z",
+      "feature": "[id]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-06T18:18:26.771Z",
+      "feature": "[id]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:54:06.604Z",
+      "feature": "near-pick-web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:54:15.403Z",
+      "feature": "near-pick-web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:54:20.593Z",
+      "feature": "near-pick-web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:54:23.795Z",
+      "feature": "near-pick-web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:54:29.282Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:54:35.642Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:54:43.094Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:54:49.176Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:54:55.746Z",
+      "feature": "store",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:55:04.343Z",
+      "feature": "product",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:55:19.572Z",
+      "feature": "product",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:55:30.278Z",
+      "feature": "product",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:55:37.354Z",
+      "feature": "product",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:55:41.730Z",
+      "feature": "product",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:56:06.281Z",
+      "feature": "[id]",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:56:40.214Z",
+      "feature": "(consumer)",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:56:51.234Z",
+      "feature": "product",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:57:26.117Z",
+      "feature": "new",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:57:35.662Z",
+      "feature": "location",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:57:55.204Z",
+      "feature": "location",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:58:08.996Z",
+      "feature": "locations",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:58:13.129Z",
+      "feature": "mypage",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:58:18.794Z",
+      "feature": "mypage",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:58:57.381Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:59:00.206Z",
+      "feature": "api",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:59:07.673Z",
+      "feature": "new",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T03:59:32.780Z",
+      "feature": "mock",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T07:13:29.269Z",
+      "feature": "near-pick-web",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T07:26:11.924Z",
+      "feature": "new",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T12:19:32.151Z",
+      "feature": "purchase",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-12T12:19:33.644Z",
+      "feature": "reserve",
       "phase": "do",
       "action": "updated"
     }

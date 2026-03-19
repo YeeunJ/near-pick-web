@@ -13,6 +13,8 @@ export const mockProducts: ProductSummaryResponse[] = [
     shopAddress: '서울 강남구 역삼동 123',
     shopLat: 37.5000,
     shopLng: 127.0360,
+    category: 'BEVERAGE',
+    thumbnailUrl: null,
   },
   {
     id: 2,
@@ -26,6 +28,8 @@ export const mockProducts: ProductSummaryResponse[] = [
     shopAddress: '서울 강남구 삼성동 45',
     shopLat: 37.5080,
     shopLng: 127.0620,
+    category: 'FOOD',
+    thumbnailUrl: null,
   },
   {
     id: 3,
@@ -39,6 +43,8 @@ export const mockProducts: ProductSummaryResponse[] = [
     shopAddress: '서울 강남구 논현동 78',
     shopLat: 37.5130,
     shopLng: 127.0290,
+    category: 'FOOD',
+    thumbnailUrl: null,
   },
   {
     id: 4,
@@ -52,6 +58,8 @@ export const mockProducts: ProductSummaryResponse[] = [
     shopAddress: '서울 강남구 청담동 12',
     shopLat: 37.5270,
     shopLng: 127.0510,
+    category: 'FOOD',
+    thumbnailUrl: null,
   },
   {
     id: 5,
@@ -65,6 +73,8 @@ export const mockProducts: ProductSummaryResponse[] = [
     shopAddress: '서울 강남구 역삼동 56',
     shopLat: 37.5010,
     shopLng: 127.0380,
+    category: 'FOOD',
+    thumbnailUrl: null,
   },
 ]
 
@@ -86,6 +96,10 @@ export const mockProductDetail: ProductDetailResponse = {
   wishlistCount: 12,
   reservationCount: 5,
   purchaseCount: 3,
+  category: 'BEVERAGE',
+  images: [],
+  menuOptions: [],
+  specs: null,
 }
 
 export const mockFlashProductDetail: ProductDetailResponse = {
@@ -106,4 +120,8 @@ export const mockFlashProductDetail: ProductDetailResponse = {
   wishlistCount: 24,
   reservationCount: 0,
   purchaseCount: 17,
+  category: 'FOOD',
+  images: [],
+  menuOptions: [],
+  specs: null,
 }

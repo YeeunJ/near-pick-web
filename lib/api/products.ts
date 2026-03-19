@@ -1,16 +1,35 @@
 import { api, extractList } from './client'
-import type { PageResponse, ProductDetailResponse, ProductSummaryResponse, SortType } from '@/types/api'
+import type {
+  LocationSource,
+  PageResponse,
+  ProductCategory,
+  ProductDetailResponse,
+  ProductSummaryResponse,
+  SortType,
+} from '@/types/api'
 
-export function getNearbyProducts(
-  lat: number,
-  lng: number,
-  radius: number,
-  sort: SortType = 'POPULARITY',
-): Promise<ProductSummaryResponse[]> {
+interface NearbyParams {
+  lat?: number
+  lng?: number
+  radius: number
+  sort?: SortType
+  locationSource?: LocationSource
+  savedLocationId?: number
+  category?: ProductCategory
+}
+
+export function getNearbyProducts(params: NearbyParams): Promise<ProductSummaryResponse[]> {
+  const q = new URLSearchParams()
+  if (params.lat !== undefined) q.set('lat', String(params.lat))
+  if (params.lng !== undefined) q.set('lng', String(params.lng))
+  q.set('radius', String(params.radius))
+  if (params.sort) q.set('sort', params.sort)
+  if (params.locationSource) q.set('locationSource', params.locationSource)
+  if (params.savedLocationId !== undefined) q.set('savedLocationId', String(params.savedLocationId))
+  if (params.category) q.set('category', params.category)
+
   return api
-    .get<PageResponse<ProductSummaryResponse>>(
-      `/products/nearby?lat=${lat}&lng=${lng}&radius=${radius}&sort=${sort}`,
-    )
+    .get<PageResponse<ProductSummaryResponse>>(`/products/nearby?${q.toString()}`)
     .then(extractList)
 }
 

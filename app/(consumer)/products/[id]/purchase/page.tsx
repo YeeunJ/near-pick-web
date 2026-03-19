@@ -36,6 +36,7 @@ export default function PurchasePage({ params }: { params: Promise<{ id: string 
     setSubmitting(true)
     try {
       await createFlashPurchase({ productId: product.id, quantity: Number(quantity) })
+      router.refresh()
       router.push('/mypage/purchases')
     } catch {
       setOpen(false)

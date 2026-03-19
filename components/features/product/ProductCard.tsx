@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Heart, MapPin, Star, Zap } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { CategoryBadge } from './CategoryBadge'
 import { formatPrice } from '@/lib/utils'
 import { addWishlist, removeWishlist } from '@/lib/api/wishlist'
 import type { ProductSummaryResponse } from '@/types/api'
@@ -27,7 +28,7 @@ export function ProductCard({ product, isWishlisted = false, onWishlistChange }:
         onWishlistChange?.(product.id, true)
       }
     } catch {
-      // 로그인 필요 등 에러는 무시 (상세 페이지에서 처리)
+      // 로그인 필요 등 에러는 무시
     }
   }
 
@@ -35,7 +36,15 @@ export function ProductCard({ product, isWishlisted = false, onWishlistChange }:
     <Link href={`/products/${product.id}`}>
       <Card className="overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
         <div className="relative aspect-square bg-gray-100 flex items-center justify-center text-gray-300 text-sm">
-          이미지
+          {product.thumbnailUrl ? (
+            <img
+              src={product.thumbnailUrl}
+              alt={product.title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <span className="text-sm text-gray-300">이미지 없음</span>
+          )}
           <button
             onClick={handleHeart}
             className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
@@ -46,6 +55,11 @@ export function ProductCard({ product, isWishlisted = false, onWishlistChange }:
               }`}
             />
           </button>
+          {product.category && (
+            <div className="absolute bottom-2 left-2">
+              <CategoryBadge category={product.category} size="sm" />
+            </div>
+          )}
         </div>
         <CardContent className="p-3 space-y-1">
           <div className="flex items-start justify-between gap-1">
