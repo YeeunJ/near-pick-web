@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Heart, Calendar, ShoppingBag, ChevronRight, LogOut, User } from 'lucide-react'
+import { Heart, Calendar, ShoppingBag, ChevronRight, LogOut, User, MapPin } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/lib/store/authStore'
@@ -12,14 +12,16 @@ const ROLE_LABEL: Record<string, string> = {
   ADMIN: '관리자',
 }
 
-const MY_MENU = [
-  { href: '/mypage/wishlist', icon: Heart, label: '찜 목록' },
-  { href: '/mypage/reservations', icon: Calendar, label: '예약 내역' },
-  { href: '/mypage/purchases', icon: ShoppingBag, label: '구매 내역' },
+const ALL_MENU = [
+  { href: '/mypage/wishlist', icon: Heart, label: '찜 목록', roles: ['CONSUMER'] },
+  { href: '/mypage/reservations', icon: Calendar, label: '예약 내역', roles: ['CONSUMER'] },
+  { href: '/mypage/purchases', icon: ShoppingBag, label: '구매 내역', roles: ['CONSUMER'] },
+  { href: '/mypage/locations', icon: MapPin, label: '저장 위치 관리', roles: ['CONSUMER'] },
 ]
 
 export default function MyPage() {
   const { userId, role, logout } = useAuthStore()
+  const MY_MENU = ALL_MENU.filter((item) => !role || item.roles.includes(role))
 
   return (
     <div className="flex flex-col">

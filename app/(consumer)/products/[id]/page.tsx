@@ -10,6 +10,10 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { StatusBadge } from '@/components/features/StatusBadge'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { ImageGallery } from '@/components/features/product/ImageGallery'
+import { CategoryBadge } from '@/components/features/product/CategoryBadge'
+import { MenuOptionSection } from '@/components/features/product/MenuOptionSection'
+import { SpecsSection } from '@/components/features/product/SpecsSection'
 import { getProductDetail } from '@/lib/api/products'
 import { addWishlist, getWishlist, removeWishlist } from '@/lib/api/wishlist'
 import { formatPrice } from '@/lib/utils'
@@ -83,14 +87,15 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
     <div className="flex flex-col">
       <PageHeader title="상품 상세" showBack />
 
-      <div className="aspect-video bg-muted flex items-center justify-center text-muted-foreground text-sm">
-        이미지
-      </div>
+      <ImageGallery images={product.images} />
 
       <div className="p-4 space-y-4">
         <div className="space-y-2">
           <div className="flex items-start justify-between gap-2">
-            <h1 className="text-lg font-bold leading-tight">{product.title}</h1>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-lg font-bold leading-tight">{product.title}</h1>
+              {product.category && <CategoryBadge category={product.category} />}
+            </div>
             <StatusBadge status={product.status} />
           </div>
           <p className="text-2xl font-bold text-primary">{formatPrice(product.price)}</p>
@@ -133,6 +138,22 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           <h2 className="font-semibold text-sm">상품 설명</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">{product.description}</p>
         </div>
+
+        {product.menuOptions.length > 0 && (
+          <>
+            <Separator />
+            <MenuOptionSection menuOptions={product.menuOptions} />
+          </>
+        )}
+
+        {product.specs && product.specs.length > 0 && (
+          <>
+            <Separator />
+            <SpecsSection specs={product.specs} />
+          </>
+        )}
+
+        <Separator />
 
         <div className="space-y-2 pt-2">
           <div className="flex gap-2">

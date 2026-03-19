@@ -48,6 +48,7 @@ export default function ReservePage({ params }: { params: Promise<{ id: string }
         quantity: Number(quantity),
         memo: memo || undefined,
       })
+      router.refresh()
       router.push('/mypage/reservations')
     } catch {
       setError('예약에 실패했습니다. 다시 시도해주세요.')
